@@ -2,8 +2,9 @@ package Application;
 
 
 
-import model.shapes.Shape;
-import model.shapes.Shape_S;
+import model.GameField;
+import model.shapes.BlockShapeDefinitions;
+
 
 public class App
 {
@@ -11,19 +12,28 @@ public class App
 	{
 		//Shape_S.printAllOrientationsForShape();
 		
-		Shape shapeS = new Shape_S();
-		shapeS.printInitialShape();
-		shapeS.printCurrentOrientation();
-		shapeS.printNextOrientation();
+		/*Shape shape;
 		
-		shapeS.rotateShape();
+		for (int i = 0; i < BlockShapeDefinitions.getNumShapes(); i++)
+		{
+			shape = new Shape(i);
+			shape.printAllOrientationsForShape();
+			shape.printCurrentOrientation();
+			shape.printNextOrientation();
+			
+			
+		}*/
 		
-		shapeS.printCurrentOrientation();
-		shapeS.printNextOrientation();
+		GameField myField = new GameField(GameField.BOARD_SIZE_X, GameField.BOARD_SIZE_Y);
+		myField.startMove();
+		myField.drop();
+		myField.drop();
+		for (int i = 0; i <20; i++)
+		{
+			myField.drop();
+			
+		}
 		
-		Shape shapeNext = shapeS.getNextOrientation();
-		shapeNext.printCurrentOrientation();
-		shapeNext.getNextOrientation().printCurrentOrientation();
 		
 	}
 }

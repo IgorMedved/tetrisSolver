@@ -4,9 +4,9 @@ public class Point
 {
 	public static final int INVALID_COORDINATE = -1;
 	public static final int X_LOWER = 0;
-	public static final int X_UPPER = 4;
+	public static final int X_UPPER = 11;
 	public static final int Y_LOWER = 0;
-	public static final int Y_UPPER = 3;
+	public static final int Y_UPPER = 17;
 	
 	private int mX;
 	private int mY;
@@ -18,12 +18,12 @@ public class Point
 	
 	public void setPoint (int x, int y)
 	{
-		if (Point.outOfBound(x,y))
+		/*if (Point.outOfBound(x,y))
 		{
 			mX = INVALID_COORDINATE;
 			mY = INVALID_COORDINATE;
 		}
-		else
+		else*/
 		{
 			mX = x;
 			mY = y;
@@ -59,6 +59,26 @@ public class Point
 	public static boolean outOfBound (int x, int y)
 	{
 		return outOfBoundX(x) || outOfBoundY(y);
+	}
+	
+	public boolean outOfBound()
+	{
+		return outOfBound(mX,mY);
+	}
+	
+	public Point left()
+	{
+		return new Point(mX-1, mY);
+	}
+	
+	public Point right()
+	{
+		return new Point (mX+1, mY);
+	}
+	
+	public Point down()
+	{
+		return new Point (mX, mY-1);
 	}
 	
 }
