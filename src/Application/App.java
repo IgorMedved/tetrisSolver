@@ -2,8 +2,9 @@ package Application;
 
 
 
-import model.GameField;
-import model.shapes.BlockShapeDefinitions;
+
+
+import controller.Controller;
 
 
 public class App
@@ -24,7 +25,7 @@ public class App
 			
 		}*/
 		
-		GameField myField = new GameField(GameField.BOARD_SIZE_X, GameField.BOARD_SIZE_Y);
+		/*GameField myField = new GameField(GameField.BOARD_SIZE_X, GameField.BOARD_SIZE_Y);
 		myField.startMove();
 		myField.drop();
 		myField.drop();
@@ -32,7 +33,11 @@ public class App
 		{
 			myField.drop();
 			
-		}
+		}*/
+		
+		controller.Controller mController = new Controller ();
+		mController.run();
+		
 		
 		
 	}
