@@ -65,43 +65,34 @@ public class Shape
 		mLocation = mLocation.down();
 	}
 	
-	public Shape left()
+	
+	private Shape movedShape (Point newLocation)
 	{
 		try
 		{
-			return new Shape(mShapeType, mOrientation, mLocation.left());
+			return new Shape(mShapeType, mOrientation, newLocation);
 		} catch (InvalidShapeException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public Shape left()
+	{
+		return movedShape (mLocation.left());
 	}
 	
 	public Shape right()
 	{
-		try
-		{
-			return new Shape(mShapeType, mOrientation, mLocation.right());
-		} catch (InvalidShapeException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return movedShape (mLocation.right());
 	}
 	
 	public Shape down()
 	{
-		try
-		{
-			return new Shape(mShapeType, mOrientation, mLocation.down());
-		} catch (InvalidShapeException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return movedShape (mLocation.down());
+		
 	}
 	
 	// this method always returns valid shape
@@ -109,7 +100,7 @@ public class Shape
 	{
 		try
 		{
-			return new Shape (mShapeType, BlockShapeDefinitions.getNextOrientation(mOrientation));
+			return new Shape (mShapeType, BlockShapeDefinitions.getNextOrientation(mOrientation), mLocation);
 		} catch (InvalidShapeException e)
 		{
 			// TODO Auto-generated catch block
@@ -133,10 +124,10 @@ public class Shape
 		return BlockShapeDefinitions.getShapeDefinitionInOrientation(mShapeType, BlockShapeDefinitions.getNextOrientation(mOrientation));
 	}
 	
-	public List<Point> initialOrienationGlobal()
+	private List<Point> getGlobalPoints(List<Point> localPoints)
 	{
 		List<Point> globalPoints = new ArrayList<>();
-		List<Point> localPoints = initialOrientation();
+		
 		
 		for (Point point :localPoints)
 		{
@@ -144,46 +135,29 @@ public class Shape
 		}
 		
 		return globalPoints;
+	}
+	
+	public List<Point> initialOrienationGlobal()
+	{
+		return getGlobalPoints (initialOrientation());
 	}
 	
 	public List<Point> currentOrientationGlobal()
 	{
-		List<Point> globalPoints = new ArrayList<>();
-		List<Point> localPoints = currentOrientation();
-		
-		for (Point point :localPoints)
-		{
-			globalPoints.add(new Point(point.getX()+ mLocation.getX(), point.getY()+mLocation.getY()));
-		}
-		
-		return globalPoints;
+				
+		return getGlobalPoints(currentOrientation());
 	}
 	
 	public List<Point> nextOrientationGlobal()
 	{
-		List<Point> globalPoints = new ArrayList<>();
-		List<Point> localPoints = nextOrientation();
-		
-		for (Point point :localPoints)
-		{
-			globalPoints.add(new Point(point.getX()+ mLocation.getX(), point.getY()+mLocation.getY()));
-		}
-		
-		return globalPoints;
+		return getGlobalPoints (nextOrientation());
 	}
 	
 	public List<Point> orientationGlobal(int orientation)
 	{
 		orientation = BlockShapeDefinitions.convertToValidOrientation(orientation);
-		List<Point> globalPoints = new ArrayList<>();
-		List<Point> localPoints = BlockShapeDefinitions.getShapeDefinitionInOrientation(mShapeType, orientation);
 		
-		for (Point point :localPoints)
-		{
-			globalPoints.add(new Point(point.getX()+ mLocation.getX(), point.getY()+mLocation.getY()));
-		}
-		
-		return globalPoints;
+		return getGlobalPoints (BlockShapeDefinitions.getShapeDefinitionInOrientation(mShapeType, orientation));
 	}
 	
 	public Point getLocation()

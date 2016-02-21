@@ -1,6 +1,5 @@
 package tetriswindow;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -8,8 +7,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
+
+import tetriswindow.actions.MoveAction;
+import tetriswindow.actions.RotateAction;
+import tetriswindow.listeners.KeyPressListener;
+import tetriswindow.listeners.TetrisListener;
+import tetriswindow.listeners.TetrisMainScreenButtonPressedListener;
 
 
 
@@ -35,7 +43,8 @@ public class UserInterface extends JPanel implements ActionListener
 	JLabel mLblScore;
 	
 
-	TetrisMainScreenButtonPressedListener mListener;
+	TetrisMainScreenButtonPressedListener mButtonListener;
+	KeyPressListener mKeyPressListener;
 
 	public UserInterface()
 	{
@@ -81,7 +90,10 @@ public class UserInterface extends JPanel implements ActionListener
 		add(mLblGameField, gc);
 
 		
-/*
+		
+		
+		
+/*		
 		btnGenerateReportFiles.addActionListener(this);
 		btnSelectDir.addActionListener(this);
 		btnValidateFiles.addActionListener(this);
@@ -114,10 +126,37 @@ public class UserInterface extends JPanel implements ActionListener
 		
 	}
 	
-	public void setListener(TetrisMainScreenButtonPressedListener listener)
+	private void setButtonPressListener(TetrisListener listener)
 	{
-		mListener = listener;
+		mButtonListener = (TetrisMainScreenButtonPressedListener) listener;
 	}
+	
+	private void setKeyPressListener (TetrisListener listener)
+	{
+		mKeyPressListener = (KeyPressListener) listener;
+	}
+	
+	private void registerKeyActions()
+	{
+		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(MoveAction.ROTATE_KEY), MoveAction.ACTN_ROTATE);
+		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(MoveAction.LEFT_KEY), MoveAction.ACTN_LEFT);
+		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(MoveAction.RIGHT_KEY), MoveAction.ACTN_RIGHT);
+		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(MoveAction.DROP_KEY), MoveAction.ACTN_DROP);
+		
+		this.getActionMap().put(MoveAction.ACTN_ROTATE, new MoveAction(MoveAction.ACTN_ROTATE,mKeyPressListener));
+		this.getActionMap().put(MoveAction.ACTN_LEFT, new MoveAction(MoveAction.ACTN_LEFT,mKeyPressListener));
+		this.getActionMap().put(MoveAction.ACTN_RIGHT, new MoveAction(MoveAction.ACTN_RIGHT,mKeyPressListener)); 
+		this.getActionMap().put(MoveAction.ACTN_DROP, new MoveAction(MoveAction.ACTN_DROP,mKeyPressListener));
+	}
+	
+	public void setListeners (TetrisListener mListener)
+	{
+		setButtonPressListener(mListener);
+		setKeyPressListener(mListener);
+		registerKeyActions();
+	}
+	
+	
 /*
 	public void activateValidateButton()
 	{

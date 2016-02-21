@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import model.shapes.Shape;
@@ -39,20 +40,31 @@ public class Board
 	}
 	
 	
-	public boolean  deleteLines()
+	public List<Integer> deleteLines()
 	{
-		boolean linesDeleted =false;
-		for (int row = 0; row <BOARD_SIZE_Y; row++)
-			linesDeleted = deleteLine(row);
+		List<Integer> deleteLines = new ArrayList<>();
+		for (int row = BOARD_SIZE_Y-1; row >=0; row--)
+			if (shouldDeleteLine(row))
+			{
+				deleteLines.add(row);
+				removeRow(row);
+			}
 		
-		if (linesDeleted)
-			notify();
 		
-		return linesDeleted;
+		
+		return deleteLines;
 			
 	}
 	
-	private boolean deleteLine (int row)
+	public void removeRow (int row)
+	{
+		for (int i = row; row <BOARD_SIZE_Y-1; row++)
+			 mBoard.set(i, mBoard.get(i+1));
+		
+		mBoard.set(BOARD_SIZE_Y-1, emptyRow());
+	}
+	
+	private boolean shouldDeleteLine (int row)
 	{
 		for (int col = 0; col <BOARD_SIZE_X; col++)
 			if (!mBoard.get(row).get(col))
@@ -138,5 +150,10 @@ public class Board
 	public int getWidth()
 	{
 		return mBoard.get(0).size();
+	}
+	
+	public List<Boolean> emptyRow()
+	{
+		return Arrays.asList(new Boolean[BOARD_SIZE_X]);
 	}
 }

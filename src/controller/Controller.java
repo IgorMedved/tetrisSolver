@@ -1,10 +1,14 @@
 package controller;
 
-import tetriswindow.TetrisMainScreenButtonPressedListener;
+import java.awt.event.ActionEvent;
+
 import tetriswindow.UserInterface;
 import tetriswindow.Window;
+import tetriswindow.actions.MoveAction;
+import tetriswindow.listeners.KeyPressListener;
+import tetriswindow.listeners.TetrisMainScreenButtonPressedListener;
 
-public class Controller implements TetrisMainScreenButtonPressedListener
+public class Controller  implements TetrisMainScreenButtonPressedListener, KeyPressListener
 {
 	private Window mWindow;
 	private UserInterface mInterface;
@@ -13,7 +17,7 @@ public class Controller implements TetrisMainScreenButtonPressedListener
 	{
 		mWindow = new Window();
 		mInterface = mWindow.getPanel();
-		mInterface.setListener(this);
+		mInterface.setListeners(this);
 		
 	}
 	
@@ -34,5 +38,36 @@ public class Controller implements TetrisMainScreenButtonPressedListener
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	
+
+	@Override
+	public void onUpKeyPressed()
+	{
+		// TODO Auto-generated method stub
+		System.out.println("up key pressed");
+		
+	}
+
+	@Override
+	public void onDownKeyPressed()
+	{
+		// TODO Auto-generated method stub
+		System.out.println("Down key pressed");
+	}
+
+	@Override
+	public void onLeftKeyPressed()
+	{
+		// TODO Auto-generated method stub
+		System.out.println("Left key pressed");
+	}
+
+	@Override
+	public void onRightKeyPressed()
+	{
+		// TODO Auto-generated method stub
+		System.out.println("Right key pressed");
 	}
 }

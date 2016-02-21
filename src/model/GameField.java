@@ -20,7 +20,7 @@ public class GameField
 	private Shape mNextShape;
 	
 	
-	public GameField (int sizeX, int sizeY)
+	public GameField ()
 	{
 		mBoard = new Board();
 		// a shape generated with generateRandom method should never generate InvalidShapeException!
@@ -37,85 +37,53 @@ public class GameField
 	
 	}
 	
-	
-	
-	
-	
-	public void startMove ()
+	public boolean startMove ()
 	{
-		if (mBoard.insertShapeIntoBoard(mCurrentShape))
-			//printGameField(this);
-			notify();
-		else
-			gameOver();
-			
+		return mBoard.insertShapeIntoBoard(mCurrentShape);
 	}
 	
-	public boolean moveShapeLeft ()
+	private boolean moveShape(Shape newShape, String message)
 	{
-		Shape left = mCurrentShape.left();
-		
 		List<Point> globalPoints = mCurrentShape.currentOrientationGlobal();
 		mBoard.remove(globalPoints);
-		if (mBoard.insertShapeIntoBoard(left))
+		
+		if (mBoard.insertShapeIntoBoard(newShape))
 		{
 			//printGameField(this);
-			mCurrentShape = left;
+			mCurrentShape = newShape;
 			return true;
 		}
 		else
 		{
 			mBoard.insert(globalPoints);
-			System.out.println("Can't move left");
+			
 			return false;
 		}
-		
 	}
 	
-	public boolean moveRight()
+	public boolean rotate()
 	{
-		Shape right = mCurrentShape.right();
-		
-		List<Point> currentGlobalPoints = mCurrentShape.currentOrientationGlobal();
-		mBoard.remove(currentGlobalPoints);
-		if (mBoard.insertShapeIntoBoard(right))
-		{
-			//printGameField(this);
-			mCurrentShape = right;
-			return true;
-		}
-		else
-		{
-			mBoard.insert(currentGlobalPoints);
-			System.out.println("Can't move right");
-			return false;
-		}
+		return moveShape (mCurrentShape.getNextOrientation(), "Can't Rotate");
 	}
 	
-	public boolean moveDown()
+	public boolean moveShapeLeft ()
 	{
-		Shape down = mCurrentShape.down();
-		
-		List<Point> currentGlobalPoints = mCurrentShape.currentOrientationGlobal();
-		mBoard.remove(currentGlobalPoints);
-		if (mBoard.insertShapeIntoBoard(down))
-		{
-			//printGameField(this);
-			mCurrentShape = down;
-			return true;
-		}
-		else
-		{
-			mBoard.insert(currentGlobalPoints);
-			System.out.println("Can't move down");
-			if (mBoard.deleteLines())
-				notify();
-			nextMove();
-			return false;
-		}
+		return moveShape (mCurrentShape.left(), "Can't move left");
 	}
 	
-	private void nextMove()
+	public boolean moveShapeRight()
+	{
+		return moveShape (mCurrentShape.right(), "Can't move right");
+	}
+	
+	public boolean moveShapeDown()
+	{
+		return moveShape (mCurrentShape.down(), "Can't move down");
+	}
+	
+	
+	
+	public boolean nextMove()
 	{
 		mCurrentShape = mNextShape;
 		try
@@ -128,7 +96,7 @@ public class GameField
 		}
 		
 		
-		startMove();
+		return startMove();
 		
 	}
 	
@@ -136,37 +104,16 @@ public class GameField
 	
 	public void drop()
 	{
-		while (moveDown());
+		while (moveShapeDown());
 	}
 	
-	public boolean rotate()
-	{
-		Shape rotatedShape = mCurrentShape.getNextOrientation();
-		
-		List<Point> globalPoints = mCurrentShape.currentOrientationGlobal();
-		mBoard.remove (globalPoints);
-		
-		if (mBoard.insertShapeIntoBoard(rotatedShape))
-		{
-			//printGameField(this);
-			mCurrentShape = rotatedShape;
-			return true;
-		}
-		else
-		{
-			mBoard.insert(globalPoints);
-			System.out.println("Can't rotate");
-			return false;
-		}
-		
-		
-	}
+	
 	
 
 	
-	private void gameOver()
+	public List <Integer> deleteLines()
 	{
-		System.out.println("Game Over!");
+		return mBoard.deleteLines();
 	}
 	
 	
