@@ -1,35 +1,42 @@
 package controller;
 
-import java.awt.event.ActionEvent;
-
-import tetriswindow.UserInterface;
-import tetriswindow.Window;
-import tetriswindow.actions.MoveAction;
+import model.Game;
 import tetriswindow.listeners.KeyPressListener;
 import tetriswindow.listeners.TetrisMainScreenButtonPressedListener;
 
 public class Controller  implements TetrisMainScreenButtonPressedListener, KeyPressListener
 {
-	private Window mWindow;
-	private UserInterface mInterface;
+	private Game mGame;
+	private boolean mGamePlayOn;
+	public static int playCounter = 0;
 	
 	public Controller()
 	{
-		mWindow = new Window();
-		mInterface = mWindow.getPanel();
-		mInterface.setListeners(this);
+		mGamePlayOn = false; // initialize to false and wait for start button to be pressed
 		
+	}
+	
+	public void setModel(Game game)
+	{
+		mGame = game;
 	}
 	
 	public void run()
 	{
-		//mWindow = new 
+		  
 	}
 
 	@Override
 	public void onPlayButtonPressed()
 	{
-		// TODO Auto-generated method stub
+		mGamePlayOn = mGamePlayOn? false:true; // reverse mGamePlayOn
+		mGame.setPlay(mGamePlayOn);
+		if (playCounter == 0)
+		{
+			mGame.startGame();
+			
+		}
+		playCounter++;
 		
 	}
 
@@ -47,6 +54,8 @@ public class Controller  implements TetrisMainScreenButtonPressedListener, KeyPr
 	{
 		// TODO Auto-generated method stub
 		System.out.println("up key pressed");
+		if (mGamePlayOn)
+			mGame.onUpKeyAction();
 		
 	}
 
@@ -55,6 +64,8 @@ public class Controller  implements TetrisMainScreenButtonPressedListener, KeyPr
 	{
 		// TODO Auto-generated method stub
 		System.out.println("Down key pressed");
+		if (mGamePlayOn)
+			mGame.onDownKeyAction();
 	}
 
 	@Override
@@ -62,6 +73,8 @@ public class Controller  implements TetrisMainScreenButtonPressedListener, KeyPr
 	{
 		// TODO Auto-generated method stub
 		System.out.println("Left key pressed");
+		if (mGamePlayOn)
+			mGame.onLeftKeyAction();
 	}
 
 	@Override
@@ -69,5 +82,7 @@ public class Controller  implements TetrisMainScreenButtonPressedListener, KeyPr
 	{
 		// TODO Auto-generated method stub
 		System.out.println("Right key pressed");
+		if (mGamePlayOn)
+			mGame.onRightKeyAction();
 	}
 }

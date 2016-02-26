@@ -3,14 +3,20 @@ package model;
 import java.awt.Toolkit;
 import java.util.List;
 
-class Game
+import model.listeners.ModelListener;
+
+public class Game
 {
-	GameField mGameField;
+	private GameField mGameField;
+	private ACTION_TYPE mAction;
 	
-	private final static int GAME_SPEED = 100;
+	private final static int GAME_SPEED = 1000;
 	private final static int SCORE_BASE = 100;
+	private boolean isGamePlay;
 	
-	private boolean mGamePlayOn;
+	private ModelListener mListener;
+	
+	
 	private int mLevel;
 	private int mScore;
 	
@@ -22,29 +28,32 @@ class Game
 		mScore = 0;
 	}
 	
+	public void setPlay (boolean state)
+	{
+		isGamePlay = state;
+	}
+	
 	public void startGame() 
 	{
 		mGameField.startMove();
 		
+		
 		do
 		{
-			try
-			{
+			fireStartTurnEvent();
+			
 				do
 				{
-					Thread.sleep(calculateWaitTime());
-					fireUpdateInterface();
+					fireSuccessfullMoveEvent();
+					turnWait();
+					
 				}
 				while (mGameField.moveShapeDown());
-				System.out.println("Can't move down");
+				
 				fireLinesDeletedEvent(mGameField.deleteLines());
 					
-				 
-			} catch (InterruptedException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				
+			
 		}
 		while (mGameField.nextMove());
 		
@@ -96,10 +105,15 @@ class Game
 	
 	private void fireLinesDeletedEvent(List <Integer> deletedLines)
 	{
+		
 		if (deletedLines != null)
+		{
 			mScore += deletedLines.size()*SCORE_BASE;
-		// show animation for deleted lines
-		fireUpdateInterface();
+			// show animation for deleted lines
+			fireSuccessfullMoveEvent();
+		}
+		
+		
 	}
 	
 	private void notifyError()
@@ -116,6 +130,71 @@ class Game
 	{
 		System.out.println("Game Over!");
 	}
+	
+	public void fireStartTurnEvent()
+	{
+		// update score if needed
+		// update nextShape
+	}
+	
+	public void fireSuccessfullMoveEvent()
+	{
+		//if(mListener!=null)
+		{
+			String message = mGameField.boardToString();
+			//System.out.println("mlistener is not null");
+			mListener.onMove(message);// reprint board
+			//System.out.println(message);
+		}
+	}
+	
+	public void fireDeleteLinesEvent()
+	{
+		// animate line deletion
+	}
+	
+	public void setModelListener (ModelListener listener)
+	{
+		mListener = listener;
+	}
+	private void turnWait ()
+	{
+		int timeFraction = 10;
+		int waitTime = calculateWaitTime()/timeFraction;
+		
+		for (int i = 0; i<timeFraction; i++)
+		{
+			if (!isGamePlay)
+				try
+				{
+					wait();
+				} catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			else
+				try
+				{
+					Thread.sleep(waitTime);
+				} catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
+	}
+	
+	
 
+	static enum ACTION_TYPE	{
+		ROTATE,
+		LEFT,
+		RIGHT,
+		DOWN,
+		DROP,
+		LINE_DELETE;
+	}
 	
 }

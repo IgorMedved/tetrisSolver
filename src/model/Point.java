@@ -78,6 +78,8 @@ public class Point
 	
 	public Point down()
 	{
+		
+		
 		return new Point (mX, mY-1);
 	}
 	

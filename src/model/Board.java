@@ -18,7 +18,28 @@ public class Board
 	
 	public Board ()
 	{
-		initializeBoard (BOARD_SIZE_X, BOARD_SIZE_X );
+		initializeBoard (BOARD_SIZE_X, BOARD_SIZE_Y );
+	}
+	
+	public synchronized String convertBoardToString()
+	{
+		StringBuilder sb = new StringBuilder("<html>");
+		for (int i = mBoard.size()-1; i >=0; i--)
+		{
+			for (int j = 0; j < mBoard.get(0).size(); j++)
+			{
+				
+				
+				if (mBoard.get(i).get(j))
+					sb.append("x");
+				else
+					sb.append("o");
+			}
+			
+			sb.append("<br>");
+		}
+		
+		return sb.toString();
 	}
 	
 	private void initializeBoard(int sizeX, int sizeY)
@@ -31,6 +52,11 @@ public class Board
 			xRow = new ArrayList<>();
 			for (int j = 0; j < sizeX; j ++ )
 			{
+				if (i == 0)
+				{
+					xRow.add(FILLED);
+				}
+				else
 				xRow.add(EMPTY);
 				
 			}
@@ -40,7 +66,7 @@ public class Board
 	}
 	
 	
-	public List<Integer> deleteLines()
+	public  List<Integer> deleteLines()
 	{
 		List<Integer> deleteLines = new ArrayList<>();
 		for (int row = BOARD_SIZE_Y-1; row >=0; row--)
@@ -51,17 +77,20 @@ public class Board
 			}
 		
 		
-		
 		return deleteLines;
 			
 	}
 	
 	public void removeRow (int row)
 	{
-		for (int i = row; row <BOARD_SIZE_Y-1; row++)
-			 mBoard.set(i, mBoard.get(i+1));
+		for (int i = row; i <BOARD_SIZE_Y-1; i++)
+			for (int j = 0; j< BOARD_SIZE_X; j++)
+			{
+				mBoard.get(i).set(j, mBoard.get(i+1).get(j));
+			}
 		
-		mBoard.set(BOARD_SIZE_Y-1, emptyRow());
+		for (int i = 0; i< BOARD_SIZE_X; i++)
+			mBoard.get(BOARD_SIZE_Y-1).set(i, EMPTY);
 	}
 	
 	private boolean shouldDeleteLine (int row)
@@ -117,9 +146,13 @@ public class Board
 	
 	private boolean detectCollision (List<Point> globalPoints)
 	{
+		int counter = 1;
 		for (Point point: globalPoints)
+		{
+			
 			if (mBoard.get(point.getY()).get(point.getX()))
 				return true;
+		}
 		return false;
 	}
 	

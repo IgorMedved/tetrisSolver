@@ -33,7 +33,7 @@ public class Shape
 		{
 			mShapeType = shapeType;
 			mOrientation = BlockShapeDefinitions.convertToValidOrientation(orientation);
-			mLocation = initialPoint();
+			mLocation = location;
 		}
 	}
 	
@@ -68,6 +68,8 @@ public class Shape
 	
 	private Shape movedShape (Point newLocation)
 	{
+		
+		
 		try
 		{
 			return new Shape(mShapeType, mOrientation, newLocation);
@@ -163,6 +165,11 @@ public class Shape
 	public Point getLocation()
 	{
 		return mLocation;
+	}
+	
+	public void setLocation (Point p)
+	{
+		mLocation.setPoint(p.getX(), p.getY());
 	}
 	
 	public static Shape generateRandom() throws InvalidShapeException

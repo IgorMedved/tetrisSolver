@@ -47,10 +47,11 @@ public class GameField
 		List<Point> globalPoints = mCurrentShape.currentOrientationGlobal();
 		mBoard.remove(globalPoints);
 		
+		
+		
 		if (mBoard.insertShapeIntoBoard(newShape))
 		{
-			//printGameField(this);
-			mCurrentShape = newShape;
+			mCurrentShape= newShape;
 			return true;
 		}
 		else
@@ -120,8 +121,12 @@ public class GameField
 	
 	
 	
-
 	
+
+	public String boardToString()
+	{
+		return mBoard.convertBoardToString();
+	}
 	
 	
 	

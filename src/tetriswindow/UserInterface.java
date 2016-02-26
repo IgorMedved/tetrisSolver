@@ -1,5 +1,6 @@
 package tetriswindow;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -12,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-
+import model.listeners.ModelListener;
 import tetriswindow.actions.MoveAction;
 import tetriswindow.listeners.KeyPressListener;
 import tetriswindow.listeners.TetrisListener;
@@ -20,7 +21,7 @@ import tetriswindow.listeners.TetrisMainScreenButtonPressedListener;
 
 
 
-public class UserInterface extends JPanel implements ActionListener
+public class UserInterface extends JPanel implements ActionListener, ModelListener
 {
 	private static final String PLAY = "|> Play";
 	private static final String PAUSE  = "|| Pause";
@@ -58,7 +59,7 @@ public class UserInterface extends JPanel implements ActionListener
 
 		GridBagConstraints gc = new GridBagConstraints();
 
-		gc.anchor = GridBagConstraints.LAST_LINE_END;
+		gc.anchor = GridBagConstraints.CENTER;
 		gc.gridx = 1;
 		gc.gridy = 10;
 		gc.weightx = 1;
@@ -68,7 +69,7 @@ public class UserInterface extends JPanel implements ActionListener
 
 		add(mBtnPlayPause, gc);
 		
-		gc.anchor = GridBagConstraints.LAST_LINE_END;
+		gc.anchor = GridBagConstraints.CENTER;
 		gc.gridx = 2;
 		gc.gridy = 10;
 		gc.weightx = 1;
@@ -78,8 +79,8 @@ public class UserInterface extends JPanel implements ActionListener
 
 		add(mBtnAIMode, gc);
 
-		gc.anchor = GridBagConstraints.LAST_LINE_START;
-		gc.gridx = 2;
+		gc.anchor = GridBagConstraints.CENTER;
+		gc.gridx = 1;
 		gc.gridy = 1;
 		gc.weightx = 2;
 		gc.weighty = 10;
@@ -88,9 +89,12 @@ public class UserInterface extends JPanel implements ActionListener
 		gc.fill = GridBagConstraints.NONE;
 		add(mLblGameField, gc);
 
+		setGameFieldLabel("here");
 		
+		//setScoreLabel("here");
 		
-		
+		mBtnPlayPause.addActionListener(this);
+		mBtnAIMode.addActionListener(this);
 		
 /*		
 		btnGenerateReportFiles.addActionListener(this);
@@ -108,15 +112,45 @@ public class UserInterface extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == mBtnPlayPause)
+		{	
 			firePlayPauseEvent();
+			
+		}
 		else if (e.getSource() == mBtnAIMode)
+		{
 			fireAIOnOffEvent();
+		}
+		
+			
 		
 
 	}
 	
-	private void firePlayPauseEvent()
+	public void setGameFieldLabel(String message)
 	{
+		mLblGameField.setText(message);
+	}
+	
+	
+	
+	public void setScoreLabel(String message)
+	{
+		
+		
+		mLblScore.setText(message);
+	}
+	
+	private void firePlayPauseEvent()
+	
+	{
+		Thread t1 = new Thread(new Runnable(){
+			public void run()
+			{
+				mButtonListener.onPlayButtonPressed();
+			}
+		});
+		
+		t1.start();
 		
 	}
 	
@@ -154,33 +188,39 @@ public class UserInterface extends JPanel implements ActionListener
 		setKeyPressListener(mListener);
 		registerKeyActions();
 	}
+
+	@Override
+	public void onStartTurn(int nextShapeType, boolean shouldUpdateType, int newScore, boolean shouldUpdateScore)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMove(String message)
+	{
+		
+		setGameFieldLabel(message);
+		
+	}
+
+	@Override
+	public void onLineDelete()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public Dimension getPreferredSize()
+	{
+		return new Dimension(600, 800);
+	}
 	
 	
 /*
-	public void activateValidateButton()
-	{
-		btnGenerateReportFiles.setEnabled(false);
-		btnValidateFiles.setEnabled(true);
-		btnOpenLogFiles.setEnabled(false);
-	}
+	
 
-	public void activateReportButton(boolean validationSuccessful)
-	{
-		if (validationSuccessful)
-		{
-			btnGenerateReportFiles.setEnabled(true);
-			btnValidateFiles.setEnabled(true);
-			btnOpenLogFiles.setEnabled(false);
-		}
-
-		else
-		{
-			btnGenerateReportFiles.setEnabled(false);
-			btnValidateFiles.setEnabled(true);
-			btnOpenLogFiles.setEnabled(false);
-		}
-	}
-
+	
 	private void fireDirectorySelectButtonPressedEvent()
 	{
 		if (mListener != null)
@@ -194,22 +234,9 @@ public class UserInterface extends JPanel implements ActionListener
 			mListener.onValidateButtonPressed();
 	}
 
-	private void fireLogButtonPressedEvent()
-	{
-		if (mListener != null)
-			mListener.onLogButtonPressed();
-	}
+	
 
-	private void fireReportButtonPressedEvent()
-	{
-		if (mListener != null)
-			mListener.onReportButtonPressed();
-	}
-
-	public Dimension getPreferredSize()
-	{
-		return new Dimension(600, 300);
-	}
+	
 
 	
 
