@@ -27,10 +27,9 @@ public class Controller  implements TetrisMainScreenButtonPressedListener, KeyPr
 	}
 
 	@Override
-	public void onPlayButtonPressed()
+	public synchronized void onPlayButtonPressed()
 	{
-		mGamePlayOn = mGamePlayOn? false:true; // reverse mGamePlayOn
-		mGame.setPlay(mGamePlayOn);
+		switchGameStatus();
 		if (playCounter == 0)
 		{
 			mGame.startGame();
@@ -84,5 +83,13 @@ public class Controller  implements TetrisMainScreenButtonPressedListener, KeyPr
 		System.out.println("Right key pressed");
 		if (mGamePlayOn)
 			mGame.onRightKeyAction();
+	}
+
+	@Override
+	public void switchGameStatus()
+	{
+		mGamePlayOn = mGamePlayOn? false:true; // reverse mGamePlayOn
+		mGame.setPlay(mGamePlayOn);
+		
 	}
 }

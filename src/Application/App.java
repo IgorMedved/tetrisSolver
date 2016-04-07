@@ -4,8 +4,10 @@ package Application;
 
 
 
-import tetriswindow.UserInterface;
-import tetriswindow.Window;
+import javax.swing.SwingUtilities;
+
+import tetriswindow.GamePanel;
+import tetriswindow.MainFrame;
 import controller.Controller;
 import model.Game;
 
@@ -15,14 +17,15 @@ public class App
 	public static void main (String[] args) throws java.lang.Exception
 	{
 		// intializing MVC
-		Window window = new Window(); // top level view class
+		GuiRunnable guiThread = new GuiRunnable();
+		SwingUtilities.invokeAndWait(guiThread); // run user interface on UI Thread
 		Controller controller = new Controller (); // controller
-		UserInterface gui = window.getPanel(); // panel inside the window view class
-		gui.setListeners(controller); // set listener for gui events (button clicks, key strokes, etc)
+		GamePanel gamePanel = guiThread.getFrameHandle().getPanel(); // panel inside the window view class
+		gamePanel.setListeners(controller); // set listener for gui events (button clicks, key strokes, etc)
 		Game game = new Game(); // main model class
 		
 		controller.setModel(game); // pass model to controller
-		game.setModelListener(gui);
+		game.setModelListener(gamePanel);
 		//game.setPlay(true);
 		//game.startGame();
 		
