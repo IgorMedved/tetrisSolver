@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import model.shapes.Shape;
 
@@ -64,6 +65,8 @@ public class Board
 		}
 		
 	}
+	
+	
 	
 	
 	public  List<Integer> deleteLines()

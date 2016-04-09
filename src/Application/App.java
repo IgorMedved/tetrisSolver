@@ -19,7 +19,7 @@ public class App
 		// intializing MVC
 		GuiRunnable guiThread = new GuiRunnable();
 		SwingUtilities.invokeAndWait(guiThread); // run user interface on UI Thread
-		Controller controller = new Controller (); // controller
+		Controller controller = new Controller (); // initialize controller
 		GamePanel gamePanel = guiThread.getFrameHandle().getPanel(); // panel inside the window view class
 		gamePanel.setListeners(controller); // set listener for gui events (button clicks, key strokes, etc)
 		Game game = new Game(); // main model class

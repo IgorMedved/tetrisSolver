@@ -130,12 +130,12 @@ public class Game
 
 	public void fireSuccessfullMoveEvent()
 	{
-		// if(mListener!=null)
+		if(mListener!=null)
 		{
 			String message = mGameField.boardToString();
-			// System.out.println("mlistener is not null");
+			
 			mListener.onMove(message);// reprint board
-			// System.out.println(message);
+			
 		}
 	}
 
