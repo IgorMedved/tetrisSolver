@@ -36,13 +36,13 @@ public class ImageDefinitions  extends JPanel  {
 		{
 		EMPTYLIGHT = ImageIO.read(new File(resources + File.separatorChar + "tetrisLight1.png"));
 		EMPTYDARK = ImageIO.read(new File(resources + File.separatorChar + "tetrisDark.png"));
-		LINE = ImageIO.read(new File(resources + File.separatorChar + "lShape.png"));
+		LINE = ImageIO.read(new File(resources + File.separatorChar + "lineShape.png"));
 		SQUARE = ImageIO.read(new File(resources + File.separatorChar + "square.png"));
 		L_SHAPE = ImageIO.read(new File(resources + File.separatorChar + "lShape.png"));
 		INVERSE_L = ImageIO.read(new File(resources + File.separatorChar + "inverseL.png"));
 		S_SHAPE = ImageIO.read(new File(resources + File.separatorChar + "sShape.png"));
 		INVERSE_S = ImageIO.read(new File(resources + File.separatorChar + "inverseS.png"));
-		COVER = ImageIO.read(new File(resources + File.separatorChar + "palm.jpg"));
+		COVER = ImageIO.read(new File(resources + File.separatorChar + "palm.png"));
 		
 		}
 		catch (IOException e)

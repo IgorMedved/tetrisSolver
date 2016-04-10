@@ -3,6 +3,8 @@ package tetris_ui_test;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,6 +31,8 @@ public class MainFrame extends JFrame {
 		mPicturePanel = new PicturePanel();
 		mScorePanel = new ScorePanel();
 		mHelpButton = new JButton();
+		
+		
 		
 		
 		
