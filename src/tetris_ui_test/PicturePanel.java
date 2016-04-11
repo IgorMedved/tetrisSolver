@@ -1,8 +1,10 @@
 package tetris_ui_test;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -11,13 +13,15 @@ public class PicturePanel extends JPanel{
 	
 	public PicturePanel()
 	{
-		setPreferredSize(new Dimension(360,360));
+		setPreferredSize(new Dimension(360,364));
+		setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
 		setLayout(new BorderLayout());
+		
 		
 		mPictureLabel = ImageDefinitions.getPicture('c');// 'c' - for cover picture
 		
 		add (mPictureLabel, BorderLayout.CENTER);
-		setVisible(true);
+		//setVisible(true);
 	}
 
 }

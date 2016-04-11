@@ -21,7 +21,7 @@ public class ScorePanel extends JPanel{
 	ScorePanel ()
 	{
 		setLayout (new GridBagLayout());
-		setPreferredSize(new Dimension(300,40));
+		setPreferredSize(new Dimension(360,55));
 		
 		mLevelLabel = new JLabel("<html> <font color='blue'>Level: </font></html>");
 		mScoreLabel = new JLabel("<html> <font color='blue'>Score: </font></html>");

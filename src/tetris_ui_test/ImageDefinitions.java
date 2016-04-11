@@ -22,6 +22,9 @@ public class ImageDefinitions  extends JPanel  {
 	private static BufferedImage S_SHAPE; 
 	private static BufferedImage INVERSE_S;
 	private static BufferedImage COVER;
+	private static BufferedImage PLAY;
+	private static BufferedImage PAUSE;
+	private static BufferedImage HIRE;
 	
 	
 	
@@ -43,6 +46,9 @@ public class ImageDefinitions  extends JPanel  {
 		S_SHAPE = ImageIO.read(new File(resources + File.separatorChar + "sShape.png"));
 		INVERSE_S = ImageIO.read(new File(resources + File.separatorChar + "inverseS.png"));
 		COVER = ImageIO.read(new File(resources + File.separatorChar + "palm.png"));
+		HIRE = ImageIO.read(new File(resources + File.separatorChar + "programming.png"));
+		PLAY = ImageIO.read(new File(resources + File.separatorChar + "play1.png"));
+		PAUSE =ImageIO.read(new File(resources + File.separatorChar + "pause.png"));
 		
 		}
 		catch (IOException e)
@@ -74,6 +80,12 @@ public class ImageDefinitions  extends JPanel  {
 			return new JLabel (new ImageIcon(EMPTYDARK));
 		case 'c':
 			return new JLabel (new ImageIcon(COVER));
+		case 'm':
+			return new JLabel (new ImageIcon(HIRE));
+		case 'p':
+			return new JLabel (new ImageIcon(PLAY));
+		case 'u':
+			return new JLabel (new ImageIcon(PAUSE));
 		default:
 				return null;
 			

@@ -13,10 +13,13 @@ public class MainFrame extends JFrame {
 	
 	TetrisGamePanel mTetrisGlassPanel;
 	PlayPausePanel mPlayPausePanel;
-	NextFigurePanel mNextFigurePanel;
+	NextPanel mNextPanel;
 	PicturePanel mPicturePanel;
 	ScorePanel mScorePanel;
+	GameHelperPanel mGameHelperPanel;
 	JButton mHelpButton;
+	
+	
 	
 	MainFrame()
 	{
@@ -26,8 +29,9 @@ public class MainFrame extends JFrame {
 		ImageDefinitions.initializePictures();
 		mTetrisGlassPanel = new TetrisGamePanel();
 		
-		mPlayPausePanel = new PlayPausePanel();
-		mNextFigurePanel = new NextFigurePanel();
+		//mPlayPausePanel = new PlayPausePanel();
+		//mNextPanel = new NextPanel();
+		mGameHelperPanel = new GameHelperPanel();
 		mPicturePanel = new PicturePanel();
 		mScorePanel = new ScorePanel();
 		mHelpButton = new JButton();
@@ -41,8 +45,8 @@ public class MainFrame extends JFrame {
 		//add (mTetrisGlassPanel, new GridBagConstraints());
 		
 		
-		setSize(720,400);
-		setMinimumSize(new Dimension(720,400));
+		setSize(new Dimension(615,450));
+		setResizable(false);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    setVisible(true);
 	}
@@ -65,22 +69,29 @@ public class MainFrame extends JFrame {
 		gc.gridy = 0;
 		
 		gc.weightx = .18;
-		gc.weighty = .02;
+		gc.weighty = .03;
 		
 		gc.anchor = GridBagConstraints.FIRST_LINE_START;
 		
 		add(mScorePanel, gc);
 		
 		
-		gc.gridx =1;
+		gc.gridx=1;
+		gc.weightx=.12;
+		gc.anchor = GridBagConstraints.FIRST_LINE_START;
+		
+		add (mGameHelperPanel, gc);
+		
+		
+		/*gc.gridx =1;
 		gc.weightx=.02;
 		gc.anchor = GridBagConstraints.FIRST_LINE_START;
 		add(mPlayPausePanel, gc);
 		
-		gc.gridx =2;
+		gc.gridx =1;
 		gc.weightx=.07;
 		gc.anchor = GridBagConstraints.FIRST_LINE_END;
-		add(mNextFigurePanel,gc);
+		add(mNextPanel,gc);*/
 		
 		
 		

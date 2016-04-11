@@ -20,7 +20,7 @@ public class TetrisGamePanel extends JPanel {
 	TetrisGamePanel() {
 		super();
 		setSize(new Dimension(240, 360));
-		setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+		setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
 		initializeBoard(12,18);
 		initializeLabels();
 		
@@ -59,7 +59,7 @@ public class TetrisGamePanel extends JPanel {
 
 	}
 
-	public char getChar(int random) {
+	public static char getChar(int random) {
 		switch (random) {
 		case 1:
 			return 'i'; // line
