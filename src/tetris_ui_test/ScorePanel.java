@@ -75,7 +75,8 @@ public class ScorePanel extends JPanel{
 		add (mScoreText, gc);
 		
 		
-		setBackground(new Color(40, 40, 255, 100));
+		setBackground(new Color(144,208,255));
+		//setBackground(new Color(40, 40, 255, 100));
 		//mLevelLabel.setForeground(new Color(0, 128, 128));
 		//mScoreLabel.setForeground(new Color(0,128,128));
 		setBorder(BorderFactory.createLineBorder(Color.BLUE));

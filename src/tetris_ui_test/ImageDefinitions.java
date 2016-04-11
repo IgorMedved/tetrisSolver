@@ -47,8 +47,8 @@ public class ImageDefinitions  extends JPanel  {
 		INVERSE_S = ImageIO.read(new File(resources + File.separatorChar + "inverseS.png"));
 		COVER = ImageIO.read(new File(resources + File.separatorChar + "palm.png"));
 		HIRE = ImageIO.read(new File(resources + File.separatorChar + "programming.png"));
-		PLAY = ImageIO.read(new File(resources + File.separatorChar + "play1.png"));
-		PAUSE =ImageIO.read(new File(resources + File.separatorChar + "pause.png"));
+		PLAY = ImageIO.read(new File(resources + File.separatorChar + "playblue.png"));
+		PAUSE =ImageIO.read(new File(resources + File.separatorChar + "pauseblue.png"));
 		
 		}
 		catch (IOException e)
