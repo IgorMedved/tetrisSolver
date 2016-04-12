@@ -12,21 +12,20 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
-public class TetrisGamePanel extends JLayeredPane
+public class TetrisGamePanel extends TetrisPanel
 {
 
 	List<List<Character>> mBoard;
-	List<List<JLabel>> mBackgoundLabels;
+	List<List<JLabel>> mBackGroundLabels;
 	List<List<JLabel>> mBoardLabels;
 
 	TetrisGamePanel()
 	{
-		super();
-		setSize(new Dimension(240, 360));
-		setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+		super(12,18);
+		
 		initializeBoard(12, 18);
 		showBoardBackground();
-		showBoard();
+		showBoard(mBoard);
 
 		// drawBoard();
 
@@ -79,111 +78,4 @@ public class TetrisGamePanel extends JLayeredPane
 		}
 	}
 
-	public void showBoardBackground()
-	{
-		if (mBackgoundLabels == null)
-		{
-			setLayout(new GridBagLayout());
-			GridBagConstraints gc = new GridBagConstraints();
-
-			gc.fill = GridBagConstraints.NONE;
-
-			mBackgoundLabels = new ArrayList<>();
-			List<JLabel> labelsRow;
-			JLabel tempLabel;
-
-			for (int i = 0; i < mBoard.size(); i++)
-			{
-				labelsRow = new ArrayList<>();
-				gc.gridy = mBoard.size() - i - 1;
-
-				for (int j = 0; j < mBoard.get(i).size(); j++)
-				{
-					tempLabel = ImageDefinitions
-							.getPicture((i + j) % 2 == 0 ? 'e' : 'd');
-					labelsRow.add(tempLabel);
-
-					gc.gridx = j;
-					setLayer(tempLabel, 0);
-
-					add(tempLabel, gc);
-
-				}
-				mBackgoundLabels.add(labelsRow);
-			}
-		}
-
-	}
-
-	public void initializeLabels()
-	{
-		if (mBoardLabels == null)
-		{
-			mBoardLabels = new ArrayList<>();
-			List<JLabel> labelsRow;
-			JLabel tempLabel;
-			GridBagConstraints gc = new GridBagConstraints();
-
-			for (int i = 0; i < mBoard.size(); i++)
-			{
-				labelsRow = new ArrayList<>();
-				gc.gridy = mBoard.size() - i - 1;
-
-				for (int j = 0; j < mBoard.get(i).size(); j++)
-				{
-					
-						tempLabel = ImageDefinitions
-							.getPicture(mBoard.get(i).get(j));
-					labelsRow.add(tempLabel);
-
-					gc.gridx = j;
-					if (mBoard.get(i).get(j)!='e')
-						setLayer (tempLabel, 1);
-					else
-						setLayer(tempLabel, 0);
-
-					add(tempLabel, gc);
-
-				}
-				mBoardLabels.add(labelsRow);
-			}
-		}
-	}
-
-	public void showBoard()
-	{
-		
-		if (mBoardLabels == null)
-		{
-			initializeLabels();
-				
-		}
-		else
-		{
-			for (int i = 0; i < mBoard.size(); i++)
-			{
-				
-
-				for (int j = 0; j < mBoard.get(i).size(); j++)
-				{
-					
-						
-					if (mBoard.get(i).get(j)!='e')
-					{
-						mBoardLabels.get(i).set(j, ImageDefinitions
-								.getPicture(mBoard.get(i).get(j)));
-						setLayer (mBoardLabels.get(i).get(j), 1);
-					}
-						
-					else
-						setLayer(mBoardLabels.get(i).get(j), 0);
-
-					
-
-				}
-				
-			}
-		}
-		
-	}
 }

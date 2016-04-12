@@ -6,32 +6,60 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JLayeredPane;
 
-public class NextFigurePanel extends JPanel{
+public class NextFigurePanel extends TetrisPanel{
 	
 	JLabel mTempLabel;
-	List<List<Character>> mBoard;
+	private List<List<Character>> mBoard;
 	List<List<JLabel>> mLabels;
 	
 	NextFigurePanel()
 	{
-		//setLayout(new BorderLayout());
+		super(4,2);
+		/*//setLayout(new BorderLayout());
 		setPreferredSize(new Dimension (84,44));
 		//mTempLabel = new JLabel("nextFigure");
 		setBorder(BorderFactory.createLineBorder(Color.BLUE,2));
-		
-		inititializeBoard();
-		initializeLabels();
+		*/
+		initializeBoard(4,2);
+		showBoardBackground();
+		showBoard(mBoard);
 		
 		//add (mTempLabel, BorderLayout.CENTER);
 	}
 	
 	
-	public void inititializeBoard()
+	public void initializeBoard(int sizeX, int sizeY)
+	{
+		Random random = new Random();
+		int randomChar;
+		char ch;
+
+		mBoard = new ArrayList<>();
+		List<Character> xRow;
+
+		for (int i = 0; i < sizeY; i++)
+		{
+			xRow = new ArrayList<>();
+			for (int j = 0; j < sizeX; j++)
+			{
+				randomChar = random.nextInt(7);
+				ch = getChar(randomChar);
+
+				xRow.add(ch);
+
+			}
+			mBoard.add(xRow);
+		}
+
+	}
+	
+	/*public void initializeBoard()
 	{
 		mBoard = new ArrayList<>();
 		List<Character> xRow;
@@ -48,9 +76,9 @@ public class NextFigurePanel extends JPanel{
 		}
 			
 				
-	}
+	}*/
 	
-	public void initializeLabels()
+	/*public void initializeLabels()
 	{
 		setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
@@ -82,7 +110,7 @@ public class NextFigurePanel extends JPanel{
 			mLabels.add(labelsRow);
 		}
 		
-	}
+	}*/
 	
 	
 	
