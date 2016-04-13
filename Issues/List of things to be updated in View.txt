@@ -1,0 +1,32 @@
+List of things to be updated in interface
+Score
+Level
+board
+transparency of cover picture
+nextFigure
+
+response to game events
+
+game Events
+
+valid shape move/ rotation
+invalid shape move/rotation
+insert new figure into board
+end move
+lineDeletions
+
+
+interface events
+key press
+PlayButtonPress(play, pause)
+HelpButtonPress
+AIButtonPress
+
+
+List of things to do:
+1) Update model to be working with List<Char>
+2) Make interface model Listener
+a) scoreField listens to score updates
+b) levelField listens to level updates
+c) board listens to (valid move/rotation), shape insertion, line deletion
+d) 

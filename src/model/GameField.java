@@ -56,7 +56,7 @@ public class GameField
 		}
 		else
 		{
-			mBoard.insert(globalPoints);
+			mBoard.insert(globalPoints, mCurrentShape.getShapeType());
 			
 			return false;
 		}

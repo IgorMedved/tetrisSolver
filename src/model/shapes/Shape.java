@@ -211,6 +211,26 @@ public class Shape
 		return new Point (3, Board.BOARD_SIZE_Y-4);
 	}
 
+	public int getOrientation()
+	{
+		return mOrientation;
+	}
+
+	public int getShapeType()
+	{
+		return mShapeType;
+	}
+
+	public void setOrientation(int orientation)
+	{
+		mOrientation = orientation;
+	}
+
+	public void setShapeType(int shapeType)
+	{
+		mShapeType = shapeType;
+	}
+
 	//abstract protected void putShapeInOrientation(int orientation);
 	
 	//abstract protected void empty();

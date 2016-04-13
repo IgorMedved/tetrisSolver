@@ -10,16 +10,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.contracts.TetrisContract;
+
 public class GameHelperPanel extends JPanel{
 	
-	//private PlayPausePanel mPlayPausePanel;
-	//private NextPanel mNextPanel;
 	private JLabel mPlayLabel;
 	private JLabel mPauseLabel;
+	private Icon mPlayIcon;
+	private Icon mPauseIcon;
+	
 	private JButton mPlayPauseButton;
 	private NextFigurePanel mNextFigurePanel;
 	private JLabel mNextFigureLabel;
@@ -37,8 +41,8 @@ public class GameHelperPanel extends JPanel{
 		mNextFigureLabel.setFont(new Font("Andalus", Font.BOLD, 18));
 		mNextFigurePanel = new NextFigurePanel();
 		
-		mPlayLabel = ImageDefinitions.getPicture('p');
-		mPauseLabel = ImageDefinitions.getPicture('u');
+		mPlayLabel = ImageDefinitions.getPictureAsLabel(TetrisContract.PLAY_BTN);
+		mPauseLabel = ImageDefinitions.getPictureAsLabel(TetrisContract.PAUSE_BTN);
 		
 		mPlayPauseButton = new JButton();
 		mPlayPauseButton.setPreferredSize(new Dimension (40,40));

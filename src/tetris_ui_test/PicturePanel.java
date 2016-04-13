@@ -8,6 +8,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.contracts.TetrisContract;
+
 public class PicturePanel extends JPanel{
 	JLabel mPictureLabel;
 	
@@ -18,7 +20,7 @@ public class PicturePanel extends JPanel{
 		setLayout(new BorderLayout());
 		
 		
-		mPictureLabel = ImageDefinitions.getPicture('c');// 'c' - for cover picture
+		mPictureLabel = ImageDefinitions.getPictureAsLabel(TetrisContract.COVER);
 		
 		add (mPictureLabel, BorderLayout.CENTER);
 		//setVisible(true);

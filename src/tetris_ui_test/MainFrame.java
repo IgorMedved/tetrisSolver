@@ -8,15 +8,17 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-
+/* 
+ * This is Top level UI class all the components are initialized and layed out here
+ */
 public class MainFrame extends JFrame {
 	
-	TetrisGamePanel mTetrisGlassPanel;
-	PlayPausePanel mPlayPausePanel;
-	NextPanel mNextPanel;
-	PicturePanel mPicturePanel;
-	ScorePanel mScorePanel;
-	GameHelperPanel mGameHelperPanel;
+	private TetrisGamePanel mTetrisGamePanel; // panel showing tetris board and all the figures on it (South East corner)
+	private PicturePanel mPicturePanel; // panel with cover picture and hidden picture
+	private ScorePanel mScorePanel; // panel showing current score and level
+	private GameHelperPanel mGameHelperPanel; // panel with play button, and next shape Label and Panel on it 
+	
+	// not implemented
 	JButton mHelpButton;
 	
 	
@@ -25,16 +27,16 @@ public class MainFrame extends JFrame {
 	{
 		super ("Igor's self solving Tetris");
 		
-		setLayout(new GridBagLayout());
-		ImageDefinitions.initializePictures();
-		mTetrisGlassPanel = new TetrisGamePanel();
+		ImageDefinitions.initializePictures(); // call to read-in all the UI pictures, 
 		
-		//mPlayPausePanel = new PlayPausePanel();
-		//mNextPanel = new NextPanel();
+		// UI coponent initialization
+		mTetrisGamePanel = new TetrisGamePanel(); 
 		mGameHelperPanel = new GameHelperPanel();
 		mPicturePanel = new PicturePanel();
 		mScorePanel = new ScorePanel();
-		mHelpButton = new JButton();
+		
+		// not implemented
+		//mHelpButton = new JButton();
 		
 		
 		
@@ -42,7 +44,6 @@ public class MainFrame extends JFrame {
 		
 		componentLayout();
 		
-		//add (mTetrisGlassPanel, new GridBagConstraints());
 		
 		
 		setSize(new Dimension(615,450));
@@ -54,17 +55,16 @@ public class MainFrame extends JFrame {
 	
 	public void componentLayout()
 	{
-		//setLayout (new GridBagLayout());
+		setLayout (new GridBagLayout());
 		
 		GridBagConstraints gc = new GridBagConstraints();
 		
 		
-	    //gc.fill = GridBagConstraints.NONE;
 	    
 	    
 		
 		
-		// first row
+		// first row (scorePanel and GameHelperPanel
 		gc.gridx = 0;
 		gc.gridy = 0;
 		
@@ -83,21 +83,8 @@ public class MainFrame extends JFrame {
 		add (mGameHelperPanel, gc);
 		
 		
-		/*gc.gridx =1;
-		gc.weightx=.02;
-		gc.anchor = GridBagConstraints.FIRST_LINE_START;
-		add(mPlayPausePanel, gc);
 		
-		gc.gridx =1;
-		gc.weightx=.07;
-		gc.anchor = GridBagConstraints.FIRST_LINE_END;
-		add(mNextPanel,gc);*/
-		
-		
-		
-		
-		
-		// second row 
+		// second row (PicturePanel and TetrisGamePanel
 		
 		
 		
@@ -118,7 +105,7 @@ public class MainFrame extends JFrame {
 	
 		gc.anchor = GridBagConstraints.LAST_LINE_START;
 		
-		add(mTetrisGlassPanel, gc);
+		add(mTetrisGamePanel, gc);
 		
 		
 		

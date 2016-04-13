@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.contracts.TetrisContract;
+
 public class PlayPausePanel extends JPanel {
 	
 	private JLabel mPlayLabel;
@@ -21,8 +23,8 @@ public class PlayPausePanel extends JPanel {
 	{
 		//setLayout(new CardLayout());
 		setPreferredSize(new Dimension(40,55));
-		mPlayLabel = ImageDefinitions.getPicture('p');
-		mPauseLabel = ImageDefinitions.getPicture('u');
+		mPlayLabel = ImageDefinitions.getPictureAsLabel(TetrisContract.PLAY_BTN);
+		mPauseLabel = ImageDefinitions.getPictureAsLabel(TetrisContract.PAUSE_BTN);
 		
 		mPlayPauseButton = new JButton();
 		mPlayPauseButton.setIcon(mPlayLabel.getIcon());

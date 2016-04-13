@@ -12,12 +12,16 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
+/* 
+ * Class responsible for showing a game board and current state of the game
+ * 
+ * 
+ */
+
 public class TetrisGamePanel extends TetrisPanel
 {
 
-	List<List<Character>> mBoard;
-	List<List<JLabel>> mBackGroundLabels;
-	List<List<JLabel>> mBoardLabels;
+	private List<List<Integer>> mBoard;
 
 	TetrisGamePanel()
 	{
@@ -34,21 +38,19 @@ public class TetrisGamePanel extends TetrisPanel
 	public void initializeBoard(int sizeX, int sizeY)
 	{
 		Random random = new Random();
-		int randomChar;
-		char ch;
+		int randomShape;
 
 		mBoard = new ArrayList<>();
-		List<Character> xRow;
+		List<Integer> xRow;
 
 		for (int i = 0; i < sizeY; i++)
 		{
 			xRow = new ArrayList<>();
 			for (int j = 0; j < sizeX; j++)
 			{
-				randomChar = random.nextInt(7);
-				ch = getChar(randomChar);
+				randomShape = random.nextInt(8);
 
-				xRow.add(ch);
+				xRow.add(randomShape);
 
 			}
 			mBoard.add(xRow);
@@ -56,26 +58,6 @@ public class TetrisGamePanel extends TetrisPanel
 
 	}
 
-	public static char getChar(int random)
-	{
-		switch (random)
-		{
-		case 1:
-			return 'i'; // line
-		case 2:
-			return 's'; // s-shape
-		case 3:
-			return '2'; // inverse s-shape (or 2)
-		case 4:
-			return 'q'; // square
-		case 5:
-			return 'l'; // l-shape
-		case 6:
-			return 'h'; // inverse l-sHape
-		default:
-			return 'e'; // empty square
-
-		}
-	}
+	
 
 }

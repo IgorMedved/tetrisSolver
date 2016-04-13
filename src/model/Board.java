@@ -3,19 +3,23 @@ package model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
+import model.contracts.TetrisContract;
 import model.shapes.Shape;
 
 public class Board
 {
-	public static final boolean FILLED = true;
-	public static final boolean EMPTY = false;
+	//public static final boolean FILLED = true;
+	//public static final boolean EMPTY = false;
+	
+	
+	
+	
 	
 	public static final int BOARD_SIZE_X = 12;
 	public static final int BOARD_SIZE_Y = 18;
 	
-	private List<List<Boolean>> mBoard;
+	private List<List<Integer>> mBoard;
 	
 	public Board ()
 	{
@@ -31,7 +35,7 @@ public class Board
 			{
 				
 				
-				if (mBoard.get(i).get(j))
+				if (mBoard.get(i).get(j)!=TetrisContract.EMPTY_SQUARE)
 					sb.append("x");
 				else
 					sb.append("o");
@@ -46,19 +50,15 @@ public class Board
 	private void initializeBoard(int sizeX, int sizeY)
 	{
 		mBoard = new ArrayList<>();
-		List<Boolean> xRow;
+		List<Integer> xRow;
 		
 		for (int i = 0; i < sizeY ; i++)
 		{
 			xRow = new ArrayList<>();
 			for (int j = 0; j < sizeX; j ++ )
 			{
-				if (i == 0)
-				{
-					xRow.add(FILLED);
-				}
-				else
-				xRow.add(EMPTY);
+				
+				xRow.add(TetrisContract.EMPTY_SQUARE);
 				
 			}
 			mBoard.add(xRow);
@@ -93,23 +93,23 @@ public class Board
 			}
 		
 		for (int i = 0; i< BOARD_SIZE_X; i++)
-			mBoard.get(BOARD_SIZE_Y-1).set(i, EMPTY);
+			mBoard.get(BOARD_SIZE_Y-1).set(i, TetrisContract.EMPTY_SQUARE);
 	}
 	
 	private boolean shouldDeleteLine (int row)
 	{
 		for (int col = 0; col <BOARD_SIZE_X; col++)
-			if (!mBoard.get(row).get(col))
+			if (mBoard.get(row).get(col)==TetrisContract.EMPTY_SQUARE)
 				return false;
 		
 		return true;
 	}
 
-	public void insert (List<Point> globalPoints)
+	public void insert (List<Point> globalPoints, int shapeType)
 	{
 		for (Point point : globalPoints)
 		{
-			fillPoint(point);
+			fillPoint(point, shapeType);
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class Board
 		else if (detectCollision (globalPoints))
 			return false;
 		
-		insert(globalPoints);
+		insert(globalPoints, shape.getShapeType());
 		
 		return true;
 	}
@@ -153,24 +153,24 @@ public class Board
 		for (Point point: globalPoints)
 		{
 			
-			if (mBoard.get(point.getY()).get(point.getX()))
+			if (mBoard.get(point.getY()).get(point.getX())!=TetrisContract.EMPTY_SQUARE)
 				return true;
 		}
 		return false;
 	}
 	
-	public void fillPoint (int x, int y)
+	public void fillPoint (int x, int y, int pointType)
 	{
-		mBoard.get(y).set(x,FILLED);
+		mBoard.get(y).set(x,pointType);
 	}
 	
-	public void fillPoint (Point point)
+	public void fillPoint (Point point, int pointType)
 	{
-		fillPoint(point.getX(), point.getY());
+		fillPoint(point.getX(), point.getY(), pointType);
 	}
 	public void removePoint (int x, int y)
 	{
-		mBoard.get(y).set(x, EMPTY);
+		mBoard.get(y).set(x, TetrisContract.EMPTY_SQUARE);
 	}
 	
 	public void removePoint (Point point)

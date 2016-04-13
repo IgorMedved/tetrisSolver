@@ -9,21 +9,24 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.contracts.TetrisContract;
+
 public class ImageDefinitions  extends JPanel  {
 	
 	
 	
 	private static BufferedImage EMPTYLIGHT; 
 	private static BufferedImage EMPTYDARK;
-	private static BufferedImage LINE; 
-	private static BufferedImage SQUARE; 
+	private static BufferedImage LINE_SHAPE; 
+	private static BufferedImage SQUARE_SHAPE; 
 	private static BufferedImage L_SHAPE; 
-	private static BufferedImage INVERSE_L; 
+	private static BufferedImage INVERTED_L_SHAPE; 
 	private static BufferedImage S_SHAPE; 
 	private static BufferedImage INVERSE_S;
+	private static BufferedImage T_SHAPE;
 	private static BufferedImage COVER;
-	private static BufferedImage PLAY;
-	private static BufferedImage PAUSE;
+	private static BufferedImage PLAY_BTN;
+	private static BufferedImage PAUSE_BTN;
 	private static BufferedImage HIRE;
 	
 	
@@ -39,16 +42,17 @@ public class ImageDefinitions  extends JPanel  {
 		{
 		EMPTYLIGHT = ImageIO.read(new File(resources + File.separatorChar + "tetrisLight1.png"));
 		EMPTYDARK = ImageIO.read(new File(resources + File.separatorChar + "tetrisDark.png"));
-		LINE = ImageIO.read(new File(resources + File.separatorChar + "lineShape.png"));
-		SQUARE = ImageIO.read(new File(resources + File.separatorChar + "square.png"));
+		LINE_SHAPE = ImageIO.read(new File(resources + File.separatorChar + "lineShape.png"));
+		SQUARE_SHAPE = ImageIO.read(new File(resources + File.separatorChar + "square.png"));
 		L_SHAPE = ImageIO.read(new File(resources + File.separatorChar + "lShape.png"));
-		INVERSE_L = ImageIO.read(new File(resources + File.separatorChar + "inverseL.png"));
+		INVERTED_L_SHAPE = ImageIO.read(new File(resources + File.separatorChar + "inverseL.png"));
 		S_SHAPE = ImageIO.read(new File(resources + File.separatorChar + "sShape.png"));
 		INVERSE_S = ImageIO.read(new File(resources + File.separatorChar + "inverseS.png"));
+		T_SHAPE = ImageIO.read(new File(resources + File.separatorChar + "tShape.png"));
 		COVER = ImageIO.read(new File(resources + File.separatorChar + "palm.png"));
 		HIRE = ImageIO.read(new File(resources + File.separatorChar + "programming.png"));
-		PLAY = ImageIO.read(new File(resources + File.separatorChar + "playblue.png"));
-		PAUSE =ImageIO.read(new File(resources + File.separatorChar + "pauseblue.png"));
+		PLAY_BTN = ImageIO.read(new File(resources + File.separatorChar + "playblue.png"));
+		PAUSE_BTN =ImageIO.read(new File(resources + File.separatorChar + "pauseblue.png"));
 		
 		}
 		catch (IOException e)
@@ -58,38 +62,61 @@ public class ImageDefinitions  extends JPanel  {
 		
 	}
 	
-	public static JLabel getPicture(char type)
+	public static JLabel getPictureAsLabel(int resourceID)
 	{
-		switch (type)
+		
+		return new JLabel(getIcon(resourceID));	
+		
+	}
+	
+	public static ImageIcon getIcon(int resourceID)
+	{
+		return new ImageIcon (getImage(resourceID));
+	}
+	
+	public static BufferedImage getImage(int resourceID)
+	{
+		switch(resourceID)
 		{
-		case 'i':
-			return new JLabel (new ImageIcon(LINE));
-		case 's':
-			return new JLabel (new ImageIcon(S_SHAPE));
-		case '2':
-			return new JLabel (new ImageIcon(INVERSE_S));
-		case 'q':
-			return new JLabel (new ImageIcon(SQUARE));
-		case 'l':
-			return new JLabel (new ImageIcon(L_SHAPE));
-		case 'h':
-			return new JLabel (new ImageIcon(INVERSE_L));
-		case 'e':
-			return new JLabel (new ImageIcon(EMPTYLIGHT));
-		case 'd':
-			return new JLabel (new ImageIcon(EMPTYDARK));
-		case 'c':
-			return new JLabel (new ImageIcon(COVER));
-		case 'm':
-			return new JLabel (new ImageIcon(HIRE));
-		case 'p':
-			return new JLabel (new ImageIcon(PLAY));
-		case 'u':
-			return new JLabel (new ImageIcon(PAUSE));
+		case TetrisContract.S_SHAPE:
+			return S_SHAPE;
+		case TetrisContract.INVERTED_S_SHAPE:
+			return INVERSE_S;
+		case TetrisContract.LINE_SHAPE:
+			return LINE_SHAPE;
+		case TetrisContract.T_SHAPE:
+			return T_SHAPE;
+			
+		case TetrisContract.L_SHAPE:
+			return L_SHAPE;
+		case TetrisContract.INVERTED_L_SHAPE:
+			return INVERTED_L_SHAPE ;
+		case TetrisContract.SQUARE_SHAPE:
+			return SQUARE_SHAPE;
+		case TetrisContract.EMPTY_SQUARE_LIGHT:
+			return EMPTYLIGHT;
+		case TetrisContract.EMPTY_SQUARE_DARK:
+			return EMPTYDARK;
+		case TetrisContract.COVER:
+			return COVER;
+		case TetrisContract.HIRE:
+			return HIRE;
+		case TetrisContract.PLAY_BTN:
+			return PLAY_BTN;
+		case TetrisContract.PAUSE_BTN:
+			return PAUSE_BTN;
+		
 		default:
-				return null;
+			return null;
+			
 			
 		}
+			
+		
+		
+			
+			
+		
 	}
 	
 	
