@@ -1,11 +1,9 @@
-package model.shapes;
+package tetris_model.shapes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import model.Point;
-
-
+import tetris_model.Point;
 
 
 

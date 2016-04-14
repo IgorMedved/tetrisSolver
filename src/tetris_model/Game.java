@@ -1,19 +1,28 @@
-package model;
+package tetris_model;
 
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.Timer;
+
 import model.listeners.ModelListener;
+import tetris_model.events.GameEvent;
 
 public class Game
 {
 	private GameField mGameField;
 	private ACTION_TYPE mAction;
+	private List<List<Integer>> mNextShapeBoard;
 
 	private final static int GAME_SPEED = 1000;
+	private final static int BASE_WAIT_INTERVAL = 1000;
 	private final static int SCORE_BASE = 100;
-	private boolean mIsGamePlay;
-	private boolean mIsGameStarted;
+	private boolean mGamePlay;
+	private boolean mGameStarted;
+	private boolean mGameOver;
+	Timer mTimer;
 
 	private ModelListener mListener;
 
@@ -22,17 +31,79 @@ public class Game
 
 	public Game()
 	{
-		mIsGamePlay = false;
-		mIsGameStarted = false;
+		mGamePlay = false;
+		mGameStarted = false;
+		mGameOver = false;
+		mTimer = new Timer (BASE_WAIT_INTERVAL, new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				move();
+				
+			}
+			
+		});
 		
+		
+	}
+	
+	private void move()
+	{
+		if (mGameField != null)
+		{
+			if (mGameField.moveShapeDown())
+				fireSuccessfulMoveEvent();
+			else
+			{
+				fireLinesDeletedEvent(mGameField.deleteLines());
+				if (mGameField.nextMove())
+					fireStartTurnEvent();
+				else
+					fireGameOverEvent();
+			}
+					
+		}
+	}
+	
+	private void initializeNewGame()
+	{
+		mGamePlay = true;
+		mGameStarted = true;
+		mGameOver = false;
 		mGameField = new GameField();
+		mNextShapeBoard = Board.generateNextShapeBoard();
+		Board.insertShapeIntoNextBoard(mNextShapeBoard, mGameField.getNextShape());
 		mLevel = 1;
 		mScore = 0;
+		mGameField.startMove();
+		fireStartGameEvent();
 	}
+	
+	
+	public void fireStartGameEvent()
+	{
+		GameEvent ev = new GameEvent(this, mGameStarted, mGameOver, mGamePlay);
+		int i;
+		ev.setBoard(mGameField.getBoard());
+		ev.setNextShape(mNextShapeBoard);
+		ev.setLevel(1);
+		ev.setScore(0);
+		ev.setCoverTransparency(0);
+		if (mListener != null)
+			i = 42;
+		
+	}
+	
+	public void fireGameOverEvent()
+	{
+		
+	}
+	
 
 	public void setPlay(boolean state)
 	{
-		mIsGamePlay = state;
+		mGamePlay = state;
 	}
 
 	public void startGame()
@@ -45,7 +116,7 @@ public class Game
 
 			do
 			{
-				fireSuccessfullMoveEvent();
+				fireSuccessfulMoveEvent();
 				turnWait();
 
 			} while (mGameField.moveShapeDown());
@@ -106,7 +177,7 @@ public class Game
 		{
 			mScore += deletedLines.size() * SCORE_BASE;
 			// show animation for deleted lines
-			fireSuccessfullMoveEvent();
+			fireSuccessfulMoveEvent();
 		}
 
 	}
@@ -132,7 +203,7 @@ public class Game
 		// update nextShape
 	}
 
-	public void fireSuccessfullMoveEvent()
+	public void fireSuccessfulMoveEvent()
 	{
 		if(mListener!=null)
 		{
@@ -160,8 +231,8 @@ public class Game
 
 		for (int i = 0; i < timeFraction; i++)
 		{
-			if (!mIsGamePlay)
-				while (!mIsGamePlay)
+			if (!mGamePlay)
+				while (!mGamePlay)
 				{
 					try
 					{

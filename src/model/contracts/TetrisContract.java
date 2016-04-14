@@ -1,5 +1,7 @@
 package model.contracts;
 
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -24,6 +26,10 @@ public class TetrisContract
 	public static final int HIRE = 11;
 	public static final int PLAY_BTN = 12;
 	public static final int PAUSE_BTN = 13;
+	
+	
+	// color Definition
+	public static final Color LIGHT_BLUE = new Color(144,208,255);
 	
 	
 	

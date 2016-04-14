@@ -1,14 +1,14 @@
-package model.shapes;
+package tetris_model.shapes;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import exceptions.InvalidShapeException;
-import model.Board;
-import model.Point;
 
+import exceptions.InvalidShapeException;
+import tetris_model.Board;
+import tetris_model.Point;
 
 public class Shape
 {
@@ -111,7 +111,7 @@ public class Shape
 		return null;
 	}
 	
-	private List<Point> initialOrientation ()
+	public List<Point> initialOrientation ()
 	{
 		return BlockShapeDefinitions.getShapeDefinitionInOrientation(mShapeType, 0);
 	}
