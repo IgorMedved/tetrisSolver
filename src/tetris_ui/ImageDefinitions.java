@@ -62,6 +62,20 @@ public class ImageDefinitions  extends JPanel  {
 		
 	}
 	
+	public static void reinitializeHidden()
+	{
+		String workingDir = System.getProperty("user.dir");
+		String resources = workingDir + File.separatorChar+ "resources";
+		try {
+			HIRE = ImageIO.read(new File(resources + File.separatorChar + "programming.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("wrong file path" + e.getMessage());
+		}
+		
+		
+	}
+	
 	public static JLabel getPictureAsLabel(int resourceID)
 	{
 		

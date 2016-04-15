@@ -3,6 +3,8 @@ package tetris_ui;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -43,7 +45,15 @@ public class MainFrame extends JFrame implements GameEventListener {
 		
 		
 		
-		
+		addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mPicturePanel.updateCoverTransparency(255);
+				System.out.println("Registered Mouse click");
+			}
+
+		});
 		
 		componentLayout();
 		
@@ -120,7 +130,7 @@ public class MainFrame extends JFrame implements GameEventListener {
 
 
 	@Override
-	public void gameEventOccured(GameEvent e)
+	public synchronized void gameEventOccurred(GameEvent e)
 	{
 		if (e.getBoard()!=null)
 			mTetrisGamePanel.showBoard(e.getBoard());
@@ -135,6 +145,8 @@ public class MainFrame extends JFrame implements GameEventListener {
 		
 		if (e.getLinesDeleted()!= null)
 			mGameHelperPanel.animateDeletedLines(e.getLinesDeleted());
+		if (e.getCoverTransparency()!= GameEvent.NOT_UPDATED);
+			mPicturePanel.updateCoverTransparency(e.getCoverTransparency());
 	}
 
 }
