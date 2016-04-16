@@ -1,6 +1,6 @@
 package exceptions;
 
-import model.shapes.BlockShapeDefinitions;
+import tetris_model.shapes.BlockShapeDefinitions;
 
 public class InvalidShapeException extends Exception
 {

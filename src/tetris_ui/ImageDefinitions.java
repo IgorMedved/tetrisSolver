@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.contracts.TetrisContract;
+import tetris_model.contracts.TetrisContract;
 
 public class ImageDefinitions  extends JPanel  {
 	

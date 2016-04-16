@@ -1,4 +1,4 @@
-package model.contracts;
+package tetris_model.contracts;
 
 import java.awt.Color;
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import model.contracts.TetrisContract;
+import tetris_model.contracts.TetrisContract;
 import tetris_model.shapes.BlockShapeDefinitions;
 import tetris_model.shapes.Shape;
 
@@ -221,9 +221,9 @@ public class Board
 		for (Point point: shapePoints)
 		{
 			if (shape.getShapeType()== TetrisContract.LINE_SHAPE)
-				nextShapeBoard.get(point.getX()-1).set(point.getY()-1, TetrisContract.LINE_SHAPE);
+				nextShapeBoard.get(point.getY()-1).set(point.getX()-1, TetrisContract.LINE_SHAPE);
 			else
-				nextShapeBoard.get(point.getX()-1).set(point.getY()-1, shape.getShapeType());
+				nextShapeBoard.get(point.getY()-1).set(point.getX(), shape.getShapeType());
 			
 		}
 	}

@@ -17,7 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
-import model.contracts.TetrisContract;
+import tetris_model.contracts.TetrisContract;
 
 
 
@@ -80,7 +80,7 @@ public class TetrisPanel extends JLayeredPane {
 	
 	
 	// initializes labels responsible for showing tetris shapes on the board
-	public void initializeLabels(List<List<Integer>> mBoard)
+	public void initializeLabels(List<List<Integer>> board)
 	{
 		if (mBoardLabels == null)
 		{
@@ -96,16 +96,18 @@ public class TetrisPanel extends JLayeredPane {
 
 				for (int j = 0; j < mBoardSizeX; j++)
 				{
-					if (mBoard == null || mBoard.get(i).get(j)==TetrisContract.EMPTY_SQUARE_LIGHT)
+					if (board == null || board.get(i).get(j)==TetrisContract.EMPTY_SQUARE_LIGHT)
 					{
-						tempLabel = new JLabel ("e");
+						tempLabel = (i+j)%2 == 0? ImageDefinitions
+								.getPictureAsLabel(TetrisContract.EMPTY_SQUARE_LIGHT):ImageDefinitions
+								.getPictureAsLabel(TetrisContract.EMPTY_SQUARE_DARK);
 						setLayer(tempLabel, 0);
 					}
 					else
 					{
 						
 						tempLabel = ImageDefinitions
-							.getPictureAsLabel(mBoard.get(i).get(j));
+							.getPictureAsLabel(board.get(i).get(j));
 						setLayer (tempLabel, 1);
 					}
 					labelsRow.add(tempLabel);
@@ -144,8 +146,8 @@ public class TetrisPanel extends JLayeredPane {
 						setLayer(mBoardLabels.get(i).get(j), 0);
 					else
 					{
-						mBoardLabels.get(i).set(j, ImageDefinitions
-								.getPictureAsLabel(mBoard.get(i).get(j)));
+						
+						mBoardLabels.get(i).get(j).setIcon(ImageDefinitions.getIcon(mBoard.get(i).get(j)));
 						setLayer (mBoardLabels.get(i).get(j), 1);
 					}
 						

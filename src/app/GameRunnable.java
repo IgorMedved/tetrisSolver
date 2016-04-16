@@ -1,19 +1,19 @@
 package app;
 
-import tetriswindow.listeners.TetrisMainScreenButtonPressedListener;
+import tetris_ui.events.UI_EventListener;
 
 public class GameRunnable implements Runnable
 {
-	TetrisMainScreenButtonPressedListener mListener;
+	UI_EventListener mListener;
 	
 	public void run()
 	{
 		System.out.println("mListner in Game Runnable is " + mListener);
 		if (mListener != null)
-			mListener.onPlayButtonPressed();
+			mListener.onPlayButtonPressed(null);
 	}
 	
-	public synchronized void  setPlayButtonPressedListener (TetrisMainScreenButtonPressedListener listener)
+	public synchronized void  setPlayButtonPressedListener (UI_EventListener listener)
 	{
 		mListener = listener;
 		System.out.println("Set listener in Game runnable to " +mListener);

@@ -42,7 +42,7 @@ public class GameField
 		return mBoard.insertShapeIntoBoard(mCurrentShape);
 	}
 	
-	private boolean moveShape(Shape newShape, String message)
+	private synchronized boolean moveShape(Shape newShape, String message)
 	{
 		List<Point> globalPoints = mCurrentShape.currentOrientationGlobal();
 		mBoard.remove(globalPoints);
@@ -77,7 +77,7 @@ public class GameField
 		return moveShape (mCurrentShape.right(), "Can't move right");
 	}
 	
-	public boolean moveShapeDown()
+	public  boolean moveShapeDown()
 	{
 		return moveShape (mCurrentShape.down(), "Can't move down");
 	}

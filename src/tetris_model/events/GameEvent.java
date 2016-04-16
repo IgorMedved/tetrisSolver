@@ -7,15 +7,20 @@ public class GameEvent extends EventObject
 {
 	public static final int NOT_UPDATED = -1;
 	
-	List<List<Integer>> mBoard;
-	List<List<Integer>> mNextShape;
-	List<Integer> mLinesDeleted;
-	int mScore;
-	int mLevel;
-	boolean mStartGame;
-	boolean mGameOver;
-	boolean mGamePlayed;
-	int mCoverOpacity; // integer from 0 to 255;
+	private List<List<Integer>> mBoard;
+	private List<List<Integer>> mNextShape;
+	private List<Integer> mLinesDeleted;
+	private int mScore;
+	private int mLevel;
+	private boolean mStartGame;
+	private boolean mGameOver;
+	private boolean mGamePlayed;
+	private int mCoverOpacity; // integer from 0 to 255;
+	
+	
+	private boolean mGameStartedUpdated;
+	private boolean mGamePlayedUpdated;
+	private boolean mGameOverUpdated;
 	
 	
 	
@@ -178,6 +183,47 @@ public class GameEvent extends EventObject
 	{
 		mCoverOpacity = coverTransparency;
 	}
+	
+	public boolean isGameStartedUpdated() {
+		return mGameStartedUpdated;
+	}
+
+
+
+
+	public void setGameStartedUpdated(boolean mGameStartedUpdated) {
+		this.mGameStartedUpdated = mGameStartedUpdated;
+	}
+
+
+
+
+	public boolean isGamePlayedUpdated() {
+		return mGamePlayedUpdated;
+	}
+
+
+
+
+	public void setGamePlayedUpdated(boolean mGamePlayedUpdated) {
+		this.mGamePlayedUpdated = mGamePlayedUpdated;
+	}
+
+
+
+
+	public boolean isGameOverUpdated() {
+		return mGameOverUpdated;
+	}
+
+
+
+
+	public void setGameOverUpdated(boolean mGameOverUpdated) {
+		this.mGameOverUpdated = mGameOverUpdated;
+	}
+
+
 	
 	
 }

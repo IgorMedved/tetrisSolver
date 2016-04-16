@@ -1,7 +1,6 @@
 package tetris_ui;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,13 +9,17 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.contracts.TetrisContract;
+import tetris_model.contracts.TetrisContract;
+import tetris_ui.events.PlayPanelEventListener;
+import tetris_ui.events.UI_EventListener;
 
 public class PlayPausePanel extends JPanel {
 	
 	private JLabel mPlayLabel;
 	private JLabel mPauseLabel;
 	private JButton mPlayPauseButton;
+	
+	private UI_EventListener mListener;
 	
 	
 	PlayPausePanel()
@@ -47,11 +50,14 @@ public class PlayPausePanel extends JPanel {
 	
 	public void firePlayPauseEvent()
 	{
-		if (mPlayPauseButton.getIcon() == mPlayLabel.getIcon())
-			mPlayPauseButton.setIcon(mPauseLabel.getIcon());
-		else
-			mPlayPauseButton.setIcon(mPlayLabel.getIcon());
+		if (mListener!= null)
+			mListener.onPlayButtonPressed(null);
 		
+	}
+	
+	public void setPlayPanelEventListener (UI_EventListener listener)
+	{
+		mListener = listener;
 	}
 	
 	

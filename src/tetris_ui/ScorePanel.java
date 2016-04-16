@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import model.contracts.TetrisContract;
+import tetris_model.contracts.TetrisContract;
 
 public class ScorePanel extends JPanel{
 	
@@ -35,7 +35,7 @@ public class ScorePanel extends JPanel{
 		
 		
 		// format mLevelTextField
-		mLevelText.setText("10");
+		mLevelText.setText("1");
 		mLevelText.setBackground(TetrisContract.LIGHT_BLUE);
 		mLevelText.setEnabled(false);
 		mLevelText.setFont(new Font("Andalus", Font.PLAIN, 18));
@@ -44,7 +44,7 @@ public class ScorePanel extends JPanel{
 //		mLevelText.setEditable(false);
 		
 		
-		mScoreText.setText("5300");
+		mScoreText.setText("0");
 		mScoreText.setBackground(TetrisContract.LIGHT_BLUE);
 		mScoreText.setEnabled(false);
 		mScoreText.setDisabledTextColor(Color.BLUE);

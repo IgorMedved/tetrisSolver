@@ -1,4 +1,4 @@
-package tetris_model;
+package tetris_controller;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -7,19 +7,34 @@ import java.util.List;
 
 import javax.swing.Timer;
 
-import model.listeners.ModelListener;
+import tetris_model.Board;
+import tetris_model.GameField;
 import tetris_model.events.GameEvent;
 import tetris_model.events.GameEventListener;
+import tetris_ui.events.AIButtonPressEvent;
+import tetris_ui.events.KeyBindingEvent;
+import tetris_ui.events.PlayButtonPressEvent;
+import tetris_ui.events.ShapeMoveAction;
+import tetris_ui.events.UI_EventListener;
 
-public class Game
+public class Game implements UI_EventListener
 {
+	
+	// ************************ Interface Related Fields *********************//
+	private GameEventListener mListener;
+	
+	
+	
+	// ************************ Interface Related Fields End*********************//
+	
+	// ************************ Model Related Fields *********************//
+	
+	
 	private GameField mGameField;
 	private List<List<Integer>> mNextShapeBoard;
 	
 	public final static int[] LEVELSCORES = new int[]{100,300,600,1000};
 	
-
-
 	private final static int GAME_SPEED = 1000;
 	private final static int BASE_WAIT_INTERVAL = 1000;
 	private final static int SCORE_BASE = 10;
@@ -28,12 +43,12 @@ public class Game
 	private boolean mGameOver;
 	private Timer mTimer;
 
-	private GameEventListener mListener;
-
 	private int mLevel;
 	private int mScore;
 	
 	private int mPictureOpacity;
+	
+	// ************************ Model Related Fields End *********************//
 
 	public Game()
 	{
@@ -56,6 +71,8 @@ public class Game
 	
 	private void move()
 	{
+		
+		
 		if (mGameField != null)
 		{
 			if (mGameField.moveShapeDown())
@@ -95,14 +112,27 @@ public class Game
 	{
 		if (mListener != null)
 		{
-			GameEvent ev = new GameEvent(this, mGameStarted, mGameOver, mGamePlay);
+			final GameEvent ev = new GameEvent(this, mGameStarted, mGameOver, mGamePlay);
 			ev.setBoard(mGameField.getBoard());
 			ev.setNextShape(mNextShapeBoard);
 			ev.setLevel(1);
 			ev.setScore(0);
 			ev.setCoverTransparency(255);
+			ev.setGamePlayedUpdated(true);
+			ev.setGameStartedUpdated(true);
+			ev.setGameOverUpdated(true);
+			
+			
+			
+			Runnable mRunnable = new Runnable(){
+				public void run()
+				{
+					mListener.gameEventOccurred(ev);
+				}
+			};
+			Thread t1 = new Thread(mRunnable);
 		
-			mListener.gameEventOccurred(ev);
+			t1.start();
 		}
 		mTimer.start();
 		
@@ -144,6 +174,7 @@ public class Game
 					
 					mGamePlay = false;// pause a game when new level is reached
 					ev.setGamePlayed(false);
+					ev.setGamePlayedUpdated(true);;
 					
 					mTimer.stop();
 				}
@@ -186,7 +217,7 @@ public class Game
 		int opacity = -1;
 		if(mScore > LEVELSCORES[LEVELSCORES.length-1])
 			return 0;
-		else if  (mScore <LEVELSCORES[0])
+		else if  (mScore <LEVELSCORES[0]||mLevel <2)
 		{
 			opacity = 255*(LEVELSCORES[0] -mScore)/(LEVELSCORES[0]);
 			return opacity <0? 0: opacity;
@@ -207,20 +238,24 @@ public class Game
 		mGameStarted = false;
 		
 		GameEvent ev = new GameEvent (this, mGameStarted, mGameOver, mGamePlay);
+		ev.setGameOverUpdated(true);
+		ev.setGamePlayedUpdated(true);
+		ev.setGameStartedUpdated(true);
+		mTimer.stop();
 		
 		mListener.gameEventOccurred(ev);
 		
 	}
 	
 
-	public void setPlay(boolean state)
+/*	public void setPlay(boolean state)
 	{
 		mGamePlay = state;
-	}
+	}*/
 
 
 
-	public void onLeftKeyAction()
+	public void onLeftKeyPressed()
 	{
 		if (mGameField.moveShapeLeft())
 			fireSuccessfulMoveEvent();
@@ -229,7 +264,7 @@ public class Game
 
 	}
 
-	public void onRightKeyAction()
+	public void onRightKeyPressed()
 	{
 		if (mGameField.moveShapeRight())
 			fireSuccessfulMoveEvent();
@@ -237,7 +272,7 @@ public class Game
 			notifyError();
 	}
 
-	public void onUpKeyAction()
+	public void onUpKeyPressed()
 	{
 		if (mGameField.rotate())
 			fireSuccessfulMoveEvent();
@@ -246,11 +281,15 @@ public class Game
 	}
 
 // this might change	
-	public void onDownKeyAction()
+	public void onDownKeyPressed()
 	{
 		mGameField.drop();
-		fireSuccessfulMoveEvent();
-		notifyFigureDropped();
+		mGameField.nextMove();
+		fireLinesDeletedEvent(mGameField.deleteLines());
+		if (mGameField.startMove())
+			fireStartTurnEvent();
+		else
+			fireGameOverEvent();
 	}
 
 	private int calculateWaitTime()
@@ -272,14 +311,114 @@ public class Game
 
 
 
-	public void fireDeleteLinesEvent()
+/*	public void fireDeleteLinesEvent()
 	{
 		// animate line deletion
-	}
+	}*/
+	
+	
+	
 
 	public void setModelListener(GameEventListener listener)
 	{
 		mListener = listener;
 	}
+
+	@Override
+	public synchronized void  onPlayButtonPressed(PlayButtonPressEvent e) 
+	{
+		if (mGameStarted == false && mGamePlay==false)
+		{
+			initializeNewGame();
+		}
+		else if (mGamePlay == false)
+		{
+			restartGame();
+		}
+		else if (mGamePlay == true)
+		{
+			pauseGame();
+		}
+		
+	}
+
+	private void pauseGame() {
+		
+		
+		mGamePlay = false;
+		
+		GameEvent ev = new GameEvent(this, mGameStarted, mGameOver, mGamePlay);
+		ev.setGamePlayedUpdated(true);
+		mListener.gameEventOccurred(ev);
+		
+		
+		mTimer.stop();
+		
+	}
+
+	private void restartGame() {
+		mGamePlay = true;
+		GameEvent ev = new GameEvent(this, mGameStarted, mGameOver, mGamePlay);
+		ev.setGamePlayedUpdated(true);
+		mListener.gameEventOccurred(ev);
+		mTimer.setDelay(calculateWaitTime());
+		mTimer.restart();
+		
+	}
+
+	
+	public void onAIButtonPressed(AIButtonPressEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public synchronized void onKeyPress(KeyBindingEvent e) {
+		
+		
+		
+		
+		String actionName = e.getActionType();
+		if (actionName.equals(ShapeMoveAction.ACTN_ROTATE))
+			onUpKeyPressed();
+		else if (actionName.equals(ShapeMoveAction.ACTN_DROP))
+			onDownKeyPressed();
+		else if (actionName.equals(ShapeMoveAction.ACTN_LEFT))
+			onLeftKeyPressed();
+		else if (actionName.equals(ShapeMoveAction.ACTN_RIGHT))
+			onRightKeyPressed();
+		
+	}
+
+
+
+/*	@Override
+	public void onKeyPressed(ShapeMoveEvent e) {
+		// TODO Auto-generated method stub
+		
+	}*/
+	
+	
+/*	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		
+		if (mListener==null)
+			return;
+		
+		
+		String actionName = (String)this.getValue(this.NAME);
+		if (actionName.equals(ACTN_ROTATE))
+			onUpKeyPressed();
+		else if (actionName.equals(ACTN_DROP))
+			onDownKeyPressed();
+		else if (actionName.equals(ACTN_LEFT))
+			onLeftKeyPressed();
+		else if (actionName.equals(ACTN_RIGHT))
+			onRightKeyPressed();
+	}*/
+		
+
+	
 
 }

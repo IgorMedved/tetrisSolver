@@ -15,7 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.contracts.TetrisContract;
+import tetris_model.contracts.TetrisContract;
+import tetris_ui.events.UI_EventListener;
 
 public class GameHelperPanel extends JPanel{
 	
@@ -25,6 +26,10 @@ public class GameHelperPanel extends JPanel{
 	private JButton mPlayPauseButton;
 	private NextFigurePanel mNextFigurePanel;
 	private JLabel mNextFigureLabel;
+	
+	private UI_EventListener mListener;
+	
+	private Thread mGameThread;
 	
 	public GameHelperPanel()
 	{
@@ -93,10 +98,22 @@ public class GameHelperPanel extends JPanel{
 	
 	public void firePlayPauseEvent()
 	{
-		if (mPlayPauseButton.getIcon() == mPlayIcon)
-			mPlayPauseButton.setIcon(mPauseIcon);
-		else
-			mPlayPauseButton.setIcon(mPlayIcon);
+		
+		if (mListener!= null)
+		{
+			Runnable gameRunnable = new Runnable(){
+				public void run()
+				{
+					mListener.onPlayButtonPressed(null);
+				}
+			};
+			
+			mGameThread = new Thread(gameRunnable);
+			
+			mGameThread.start();
+			
+		}
+			
 		
 	}
 	
@@ -108,6 +125,41 @@ public class GameHelperPanel extends JPanel{
 	public void animateDeletedLines (List<Integer> deletedLines)
 	{
 		// this method not implemented
+	}
+
+
+
+	public void setListener(UI_EventListener listener) {
+		mListener = listener;
+		
+	}
+
+
+
+	public void setGameOverMessage(boolean gameOver) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	public void setPlayButton(boolean gamePlayed) {
+		if( gamePlayed)
+		{
+			mPlayPauseButton.setIcon(mPauseIcon);
+			
+		}
+		else
+			mPlayPauseButton.setIcon(mPlayIcon);
+				
+		
+	}
+
+
+
+	public void setStartPlayMessage(boolean startGame) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

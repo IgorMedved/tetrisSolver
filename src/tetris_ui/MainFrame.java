@@ -3,16 +3,21 @@ package tetris_ui;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 
 import tetris_model.events.GameEvent;
 import tetris_model.events.GameEventListener;
+import tetris_ui.events.UI_EventListener;
+import tetris_ui.events.ShapeMoveAction;
+
 /* 
  * This is Top level UI class all the components are initialized and layed out here
  */
@@ -23,8 +28,14 @@ public class MainFrame extends JFrame implements GameEventListener {
 	private ScorePanel mScorePanel; // panel showing current score and level
 	private GameHelperPanel mGameHelperPanel; // panel with play button, and next shape Label and Panel on it 
 	
+	
+	//*************************************************************************///
+	private UI_EventListener mIntefaceEventListener;
+	
 	// not implemented
-	JButton mHelpButton;
+	private JButton mHelpButton;
+	
+	
 	
 	
 	
@@ -34,30 +45,18 @@ public class MainFrame extends JFrame implements GameEventListener {
 		
 		ImageDefinitions.initializePictures(); // call to read-in all the UI pictures, 
 		
-		// UI coponent initialization
+		// UI component initialization
 		mTetrisGamePanel = new TetrisGamePanel(); 
 		mGameHelperPanel = new GameHelperPanel();
 		mPicturePanel = new PicturePanel();
 		mScorePanel = new ScorePanel();
 		
+		
+		
 		// not implemented
 		//mHelpButton = new JButton();
 		
-		
-		
-		addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				mPicturePanel.updateCoverTransparency(255);
-				System.out.println("Registered Mouse click");
-			}
-
-		});
-		
 		componentLayout();
-		
-		
 		
 		setSize(new Dimension(615,450));
 		setResizable(false);
@@ -119,21 +118,17 @@ public class MainFrame extends JFrame implements GameEventListener {
 		gc.anchor = GridBagConstraints.LAST_LINE_START;
 		
 		add(mTetrisGamePanel, gc);
-		
-		
-		
-		
-		
-		
-		
 	}
 
 
 	@Override
 	public synchronized void gameEventOccurred(GameEvent e)
 	{
+		
 		if (e.getBoard()!=null)
+		{
 			mTetrisGamePanel.showBoard(e.getBoard());
+		}
 		if (e.getNextShape()!= null)
 			mGameHelperPanel.updateNextShape(e.getNextShape());
 		
@@ -147,6 +142,39 @@ public class MainFrame extends JFrame implements GameEventListener {
 			mGameHelperPanel.animateDeletedLines(e.getLinesDeleted());
 		if (e.getCoverOpacity()!= GameEvent.NOT_UPDATED);
 			mPicturePanel.updateCoverTransparency(e.getCoverOpacity());
+		
+		if (e.isGameOverUpdated())
+			mGameHelperPanel.setGameOverMessage(e.isGameOver());
+		
+		if (e.isGamePlayedUpdated())
+			mGameHelperPanel.setPlayButton(e.isGamePlayed());
+		
+		if (e.isGameStartedUpdated())
+			mGameHelperPanel.setStartPlayMessage(e.isStartGame());
+	}
+	
+	// method for binding up, down, left, and right keyboard keys to game Actions
+	private void registerKeyActions()
+	{
+		((JComponent) getContentPane()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(ShapeMoveAction.ROTATE_KEY), ShapeMoveAction.ACTN_ROTATE);
+		((JComponent) getContentPane()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(ShapeMoveAction.LEFT_KEY), ShapeMoveAction.ACTN_LEFT);
+		((JComponent) getContentPane()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(ShapeMoveAction.RIGHT_KEY), ShapeMoveAction.ACTN_RIGHT);
+		((JComponent) getContentPane()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(ShapeMoveAction.DROP_KEY), ShapeMoveAction.ACTN_DROP);
+		
+		
+		((JComponent) getContentPane()).getActionMap().put(ShapeMoveAction.ACTN_ROTATE, new ShapeMoveAction(ShapeMoveAction.ACTN_ROTATE,mIntefaceEventListener));
+		((JComponent) getContentPane()).getActionMap().put(ShapeMoveAction.ACTN_LEFT, new ShapeMoveAction(ShapeMoveAction.ACTN_LEFT,mIntefaceEventListener));
+		((JComponent) getContentPane()).getActionMap().put(ShapeMoveAction.ACTN_RIGHT, new ShapeMoveAction(ShapeMoveAction.ACTN_RIGHT,mIntefaceEventListener)); 
+		((JComponent) getContentPane()).getActionMap().put(ShapeMoveAction.ACTN_DROP, new ShapeMoveAction(ShapeMoveAction.ACTN_DROP,mIntefaceEventListener));
+	}
+	
+	
+	// setting controller as UI_EventListener
+	public void setListener (UI_EventListener listener)
+	{
+		mIntefaceEventListener = listener;
+		mGameHelperPanel.setListener(listener);
+		registerKeyActions();
 	}
 
 }

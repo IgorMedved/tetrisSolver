@@ -29,7 +29,7 @@ public class TetrisGamePanel extends TetrisPanel
 		
 		//initializeBoard(12, 18);// temp call
 		showBoardBackground();
-		showBoard(null);
+		//showBoard(null);
 
 
 	}
