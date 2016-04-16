@@ -84,7 +84,7 @@ public class GameField
 	
 	
 	
-	public boolean nextMove()
+	public void nextMove()
 	{
 		mCurrentShape = mNextShape;
 		try
@@ -97,7 +97,7 @@ public class GameField
 		}
 		
 		
-		return startMove();
+		//return startMove();
 		
 	}
 	

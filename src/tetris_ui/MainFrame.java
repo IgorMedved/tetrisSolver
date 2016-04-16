@@ -145,8 +145,8 @@ public class MainFrame extends JFrame implements GameEventListener {
 		
 		if (e.getLinesDeleted()!= null)
 			mGameHelperPanel.animateDeletedLines(e.getLinesDeleted());
-		if (e.getCoverTransparency()!= GameEvent.NOT_UPDATED);
-			mPicturePanel.updateCoverTransparency(e.getCoverTransparency());
+		if (e.getCoverOpacity()!= GameEvent.NOT_UPDATED);
+			mPicturePanel.updateCoverTransparency(e.getCoverOpacity());
 	}
 
 }

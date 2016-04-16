@@ -15,7 +15,7 @@ public class GameEvent extends EventObject
 	boolean mStartGame;
 	boolean mGameOver;
 	boolean mGamePlayed;
-	int mCoverTransparency; // integer from 0 to 255;
+	int mCoverOpacity; // integer from 0 to 255;
 	
 	
 	
@@ -32,7 +32,7 @@ public class GameEvent extends EventObject
 		mStartGame = isStartGame;
 		mGameOver = isGameOver;
 		mGamePlayed = isGamePlayed;
-		mCoverTransparency = NOT_UPDATED;
+		mCoverOpacity = NOT_UPDATED;
 	}
 
 
@@ -102,9 +102,9 @@ public class GameEvent extends EventObject
 
 
 
-	public int getCoverTransparency()
+	public int getCoverOpacity()
 	{
-		return mCoverTransparency;
+		return mCoverOpacity;
 	}
 
 
@@ -176,7 +176,7 @@ public class GameEvent extends EventObject
 
 	public void setCoverTransparency(int coverTransparency)
 	{
-		mCoverTransparency = coverTransparency;
+		mCoverOpacity = coverTransparency;
 	}
 	
 	

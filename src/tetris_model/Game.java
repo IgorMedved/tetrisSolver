@@ -14,13 +14,11 @@ import tetris_model.events.GameEventListener;
 public class Game
 {
 	private GameField mGameField;
-	//private ACTION_TYPE mAction;
 	private List<List<Integer>> mNextShapeBoard;
 	
-	public final static int LEVEL_2 = 100;
-	public final static int LEVEL_3 = 300;
-	public final static int LEVEL_4 = 600;
-	public final static int LEVEL_5 = 1000;
+	public final static int[] LEVELSCORES = new int[]{100,300,600,1000};
+	
+
 
 	private final static int GAME_SPEED = 1000;
 	private final static int BASE_WAIT_INTERVAL = 1000;
@@ -35,7 +33,7 @@ public class Game
 	private int mLevel;
 	private int mScore;
 	
-	private int mPictureTransparency;
+	private int mPictureOpacity;
 
 	public Game()
 	{
@@ -64,8 +62,9 @@ public class Game
 				fireSuccessfulMoveEvent();
 			else
 			{
+				mGameField.nextMove();
 				fireLinesDeletedEvent(mGameField.deleteLines());
-				if (mGameField.nextMove())
+				if (mGameField.startMove())
 					fireStartTurnEvent();
 				else
 					fireGameOverEvent();
@@ -84,9 +83,7 @@ public class Game
 		Board.insertShapeIntoNextBoard(mNextShapeBoard, mGameField.getNextShape());
 		mLevel = 1;
 		mScore = 0;
-		mPictureTransparency = getTransparency();
-//		mOldScore = mScore;
-//		mOldLevel = mLevel;
+		mPictureOpacity = getOpacity();
 		mGameField.startMove();
 		fireStartGameEvent();
 		
@@ -123,7 +120,7 @@ public class Game
 		}
 	}
 	
-	public void fireLinesDeleted(List <Integer> deletedLines)
+	public void fireLinesDeletedEvent(List <Integer> deletedLines)
 	{
 		if (mListener != null)
 		{
@@ -133,41 +130,85 @@ public class Game
 			{
 				mScore += SCORE_BASE*deletedLines.size();
 				ev.setScore(mScore);
+				int newTransparency = getOpacity();
+				if (newTransparency != mPictureOpacity)
+				{
+					mPictureOpacity = newTransparency;
+					ev.setCoverTransparency(mPictureOpacity);
+				}
 				int newLevel = getLevel ();
 				if (newLevel > mLevel)
 				{
 					mLevel = newLevel;
 					ev.setLevel(mLevel);
 					
-				}
-				int newTransparency = getTransparency();
-				if (newTransparency != mPictureTransparency)
-				{
-					mPictureTransparency = newTransparency;
-					ev.setCoverTransparency(mPictureTransparency);
-				}
+					mGamePlay = false;// pause a game when new level is reached
+					ev.setGamePlayed(false);
 					
-				
+					mTimer.stop();
+				}
 			}
+			mNextShapeBoard =Board.generateNextShapeBoard();
+			Board.insertShapeIntoNextBoard(mNextShapeBoard, mGameField.getNextShape());
+			ev.setNextShape(mNextShapeBoard);
+			
+			
+			mListener.gameEventOccurred(ev);
 		}
 	}
 	
+	public void fireStartTurnEvent()
+	{
+		if (mListener != null)
+		{
+			GameEvent ev = new GameEvent(this, mGameOver, mGameStarted, mGamePlay);
+			ev.setBoard(mGameField.getBoard());
+			int newOpacity = getOpacity();
+			if (mPictureOpacity != newOpacity) // update opacity at start of the turn for the case when level changed
+			{
+				mPictureOpacity = newOpacity;
+				ev.setCoverTransparency(mPictureOpacity);
+			}
+		}
+	}
+
 	public int getLevel()
 	{
-		if (mScore < 100)
-			return 1;
-		else
-			return 2;
+		for (int i = 0; i < LEVELSCORES.length; i++)
+			if (mScore < LEVELSCORES[i])
+				return i+1;
+		return LEVELSCORES.length +1;
 	}
 	
-	public int getTransparency ()
+	public int getOpacity ()
 	
 	{
-		
+		int opacity = -1;
+		if(mScore > LEVELSCORES[LEVELSCORES.length-1])
+			return 0;
+		else if  (mScore <LEVELSCORES[0])
+		{
+			opacity = 255*(LEVELSCORES[0] -mScore)/(LEVELSCORES[0]);
+			return opacity <0? 0: opacity;
+		}
+		else
+		{
+			opacity =255 * (LEVELSCORES[mLevel-1] -mScore)/(LEVELSCORES[mLevel-1] -LEVELSCORES[mLevel-2]);
+			return opacity <0? 0: opacity;
+		}
 	}
+			
+	
 	
 	public void fireGameOverEvent()
 	{
+		mGamePlay = false;
+		mGameOver = true;
+		mGameStarted = false;
+		
+		GameEvent ev = new GameEvent (this, mGameStarted, mGameOver, mGamePlay);
+		
+		mListener.gameEventOccurred(ev);
 		
 	}
 	
@@ -217,22 +258,7 @@ public class Game
 		return GAME_SPEED / mLevel;
 	}
 
-/*	private void fireUpdateInterface()
-	{
 
-	}*/
-
-	private void fireLinesDeletedEvent(List<Integer> deletedLines)
-	{
-
-		if (deletedLines != null)
-		{
-			mScore += deletedLines.size() * SCORE_BASE;
-			// show animation for deleted lines
-			fireSuccessfulMoveEvent();
-		}
-
-	}
 
 	private void notifyError()
 	{
@@ -244,43 +270,16 @@ public class Game
 		Toolkit.getDefaultToolkit().beep();
 	}
 
-	private void gameOver()
-	{
-		System.out.println("Game Over!");
-	}
 
-	public void fireStartTurnEvent()
-	{
-		// update score if needed
-		// update nextShape
-	}
-
-/*	public void fireSuccessfulMoveEvent()
-	{
-		if(mListener!=null)
-		{
-			String message = mGameField.boardToString();
-			
-			mListener.onMove(message);// reprint board
-			
-		}
-	}*/
 
 	public void fireDeleteLinesEvent()
 	{
 		// animate line deletion
 	}
 
-	public void setModelListener(ModelListener listener)
+	public void setModelListener(GameEventListener listener)
 	{
 		mListener = listener;
 	}
-
-
-/*
-	static enum ACTION_TYPE
-	{
-		ROTATE, LEFT, RIGHT, DOWN, DROP, LINE_DELETE;
-	}*/
 
 }
