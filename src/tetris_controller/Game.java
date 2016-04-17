@@ -19,22 +19,20 @@ import tetris_ui.events.UI_EventListener;
 
 public class Game implements UI_EventListener
 {
-	
+
 	// ************************ Interface Related Fields *********************//
 	private GameEventListener mListener;
-	
-	
-	
-	// ************************ Interface Related Fields End*********************//
-	
+
+	// ************************ Interface Related Fields
+	// End*********************//
+
 	// ************************ Model Related Fields *********************//
-	
-	
+
 	private GameField mGameField;
 	private List<List<Integer>> mNextShapeBoard;
-	
-	public final static int[] LEVELSCORES = new int[]{100,300,600,1000};
-	
+
+	public final static int[] LEVELSCORES = new int[] { 100, 300, 600, 1000 };
+
 	private final static int GAME_SPEED = 1000;
 	private final static int BASE_WAIT_INTERVAL = 1000;
 	private final static int SCORE_BASE = 10;
@@ -45,9 +43,10 @@ public class Game implements UI_EventListener
 
 	private int mLevel;
 	private int mScore;
-	
+
 	private int mPictureOpacity;
-	
+	private int mLinesDeleted;
+
 	// ************************ Model Related Fields End *********************//
 
 	public Game()
@@ -55,24 +54,23 @@ public class Game implements UI_EventListener
 		mGamePlay = false;
 		mGameStarted = false;
 		mGameOver = false;
-		mTimer = new Timer (BASE_WAIT_INTERVAL, new ActionListener(){
+		mTimer = new Timer(BASE_WAIT_INTERVAL, new ActionListener()
+		{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
 				move();
-				
+
 			}
-			
+
 		});
-		
-		
+
 	}
-	
+
 	private void move()
 	{
-		
-		
+
 		if (mGameField != null)
 		{
 			if (mGameField.moveShapeDown())
@@ -86,10 +84,10 @@ public class Game implements UI_EventListener
 				else
 					fireGameOverEvent();
 			}
-					
+
 		}
 	}
-	
+
 	private void initializeNewGame()
 	{
 		mGamePlay = true;
@@ -97,22 +95,23 @@ public class Game implements UI_EventListener
 		mGameOver = false;
 		mGameField = new GameField();
 		mNextShapeBoard = Board.generateNextShapeBoard();
-		Board.insertShapeIntoNextBoard(mNextShapeBoard, mGameField.getNextShape());
+		Board.insertShapeIntoNextBoard(mNextShapeBoard,
+				mGameField.getNextShape());
 		mLevel = 1;
 		mScore = 0;
 		mPictureOpacity = getOpacity();
+		mLinesDeleted = 0;
 		mGameField.startMove();
 		fireStartGameEvent();
-		
-		
+
 	}
-	
-	
+
 	public void fireStartGameEvent()
 	{
 		if (mListener != null)
 		{
-			final GameEvent ev = new GameEvent(this, mGameStarted, mGameOver, mGamePlay);
+			final GameEvent ev = new GameEvent(this, mGameStarted, mGameOver,
+					mGamePlay);
 			ev.setBoard(mGameField.getBoard());
 			ev.setNextShape(mNextShapeBoard);
 			ev.setLevel(1);
@@ -121,85 +120,88 @@ public class Game implements UI_EventListener
 			ev.setGamePlayedUpdated(true);
 			ev.setGameStartedUpdated(true);
 			ev.setGameOverUpdated(true);
-			
-			
-			
-			Runnable mRunnable = new Runnable(){
+
+			Runnable mRunnable = new Runnable()
+			{
 				public void run()
 				{
 					mListener.gameEventOccurred(ev);
 				}
 			};
 			Thread t1 = new Thread(mRunnable);
-		
+
 			t1.start();
 		}
 		mTimer.start();
-		
+
 	}
-	
+
 	public void fireSuccessfulMoveEvent()
 	{
 		if (mListener != null)
 		{
-			GameEvent ev = new GameEvent (this, mGameStarted, mGameOver, mGamePlay);
+			GameEvent ev = new GameEvent(this, mGameStarted, mGameOver,
+					mGamePlay);
 			ev.setBoard(mGameField.getBoard());
-			
+
 			mListener.gameEventOccurred(ev);
-			
+
 		}
 	}
-	
-	public void fireLinesDeletedEvent(List <Integer> deletedLines)
+
+	public void fireLinesDeletedEvent(List<Integer> deletedLines)
 	{
 		if (mListener != null)
 		{
-			GameEvent ev = new GameEvent(this, mGameStarted, mGameOver, mGamePlay);
+			GameEvent ev = new GameEvent(this, mGameStarted, mGameOver,
+					mGamePlay);
 			ev.setBoard(mGameField.getBoard());
-			if (deletedLines.size() != 0)
-			{
-				mScore += SCORE_BASE*deletedLines.size();
-				ev.setScore(mScore);
-				int newTransparency = getOpacity();
-				if (newTransparency != mPictureOpacity)
-				{
-					mPictureOpacity = newTransparency;
-					ev.setCoverTransparency(mPictureOpacity);
-				}
-				int newLevel = getLevel ();
-				if (newLevel > mLevel)
-				{
-					mLevel = newLevel;
-					ev.setLevel(mLevel);
-					
-					mGamePlay = false;// pause a game when new level is reached
-					ev.setGamePlayed(false);
-					ev.setGamePlayedUpdated(true);;
-					
-					mTimer.stop();
-				}
-			}
-			mNextShapeBoard =Board.generateNextShapeBoard();
-			Board.insertShapeIntoNextBoard(mNextShapeBoard, mGameField.getNextShape());
-			ev.setNextShape(mNextShapeBoard);
 			
+			mLinesDeleted = deletedLines.size();
 			
+
 			mListener.gameEventOccurred(ev);
 		}
 	}
-	
+
 	public void fireStartTurnEvent()
 	{
 		if (mListener != null)
 		{
-			GameEvent ev = new GameEvent(this, mGameOver, mGameStarted, mGamePlay);
+			GameEvent ev = new GameEvent(this, mGameOver, mGameStarted,
+					mGamePlay);
 			ev.setBoard(mGameField.getBoard());
-			int newOpacity = getOpacity();
-			if (mPictureOpacity != newOpacity) // update opacity at start of the turn for the case when level changed
+			if (mLinesDeleted != 0)
 			{
-				mPictureOpacity = newOpacity;
-				ev.setCoverTransparency(mPictureOpacity);
+				mScore += SCORE_BASE * mLinesDeleted;
+				ev.setScore(mScore);
+				int newTransparency = getOpacity();
+				if (newTransparency != mPictureOpacity)
+				{
+
+					mPictureOpacity = newTransparency;
+					ev.setCoverTransparency(mPictureOpacity);
+				}
+				int newLevel = getLevel();
+				if (newLevel > mLevel)
+				{
+					mLevel = newLevel;
+					ev.setLevel(mLevel);
+
+					mGamePlay = false;// pause a game when new level is reached
+					ev.setGamePlayed(false);
+					ev.setGamePlayedUpdated(true);
+					
+
+					mTimer.stop();
+				}
 			}
+			mNextShapeBoard = Board.generateNextShapeBoard();
+			Board.insertShapeIntoNextBoard(mNextShapeBoard,
+					mGameField.getNextShape());
+			ev.setNextShape(mNextShapeBoard);
+			
+			mListener.gameEventOccurred(ev);
 		}
 	}
 
@@ -207,97 +209,101 @@ public class Game implements UI_EventListener
 	{
 		for (int i = 0; i < LEVELSCORES.length; i++)
 			if (mScore < LEVELSCORES[i])
-				return i+1;
-		return LEVELSCORES.length +1;
+				return i + 1;
+		return LEVELSCORES.length + 1;
 	}
-	
-	public int getOpacity ()
-	
+
+	public int getOpacity()
+
 	{
 		int opacity = -1;
-		if(mScore > LEVELSCORES[LEVELSCORES.length-1])
+		if (mScore > LEVELSCORES[LEVELSCORES.length - 1])
 			return 0;
-		else if  (mScore <LEVELSCORES[0]||mLevel <2)
+		else if (mScore < LEVELSCORES[0] || mLevel < 2)
 		{
-			opacity = 255*(LEVELSCORES[0] -mScore)/(LEVELSCORES[0]);
-			return opacity <0? 0: opacity;
-		}
-		else
+			opacity = 255 * (LEVELSCORES[0] - mScore) / (LEVELSCORES[0]);
+			return opacity < 0 ? 0 : opacity;
+		} else
 		{
-			opacity =255 * (LEVELSCORES[mLevel-1] -mScore)/(LEVELSCORES[mLevel-1] -LEVELSCORES[mLevel-2]);
-			return opacity <0? 0: opacity;
+			opacity = 255 * (LEVELSCORES[mLevel - 1] - mScore)
+					/ (LEVELSCORES[mLevel - 1] - LEVELSCORES[mLevel - 2]);
+			return opacity < 0 ? 0 : opacity;
 		}
 	}
-			
-	
-	
+
 	public void fireGameOverEvent()
 	{
 		mGamePlay = false;
 		mGameOver = true;
 		mGameStarted = false;
-		
-		GameEvent ev = new GameEvent (this, mGameStarted, mGameOver, mGamePlay);
+
+		GameEvent ev = new GameEvent(this, mGameStarted, mGameOver, mGamePlay);
 		ev.setGameOverUpdated(true);
 		ev.setGamePlayedUpdated(true);
 		ev.setGameStartedUpdated(true);
 		mTimer.stop();
-		
+
 		mListener.gameEventOccurred(ev);
-		
+
 	}
-	
 
-/*	public void setPlay(boolean state)
-	{
-		mGamePlay = state;
-	}*/
-
-
+	/*
+	 * public void setPlay(boolean state) { mGamePlay = state; }
+	 */
 
 	public void onLeftKeyPressed()
 	{
-		if (mGameField.moveShapeLeft())
-			fireSuccessfulMoveEvent();
-		else
-			notifyError();
+		if (mGamePlay)
+		{
+			if (mGameField.moveShapeLeft())
+				fireSuccessfulMoveEvent();
+			else
+				notifyError();
+		}
 
 	}
 
 	public void onRightKeyPressed()
 	{
-		if (mGameField.moveShapeRight())
-			fireSuccessfulMoveEvent();
-		else
-			notifyError();
+		if (mGamePlay)
+		{
+			if (mGameField.moveShapeRight())
+				fireSuccessfulMoveEvent();
+			else
+				notifyError();
+		}
 	}
 
 	public void onUpKeyPressed()
 	{
-		if (mGameField.rotate())
-			fireSuccessfulMoveEvent();
-		else
-			notifyError();
+		if (mGamePlay)
+		{
+			if (mGameField.rotate())
+				fireSuccessfulMoveEvent();
+			else
+				notifyError();
+		}
 	}
 
-// this might change	
+	// this might change
 	public void onDownKeyPressed()
 	{
-		mGameField.drop();
-		mGameField.nextMove();
-		fireLinesDeletedEvent(mGameField.deleteLines());
-		if (mGameField.startMove())
-			fireStartTurnEvent();
-		else
-			fireGameOverEvent();
+		if (mGamePlay)
+		{
+			mGameField.drop();
+			mGameField.nextMove();
+			fireLinesDeletedEvent(mGameField.deleteLines());
+			if (mGameField.startMove())
+				fireStartTurnEvent();
+			else
+				fireGameOverEvent();
+		}
 	}
 
 	private int calculateWaitTime()
 	{
 		return GAME_SPEED / mLevel;
 	}
-
-
 
 	private void notifyError()
 	{
@@ -309,15 +315,9 @@ public class Game implements UI_EventListener
 		Toolkit.getDefaultToolkit().beep();
 	}
 
-
-
-/*	public void fireDeleteLinesEvent()
-	{
-		// animate line deletion
-	}*/
-	
-	
-	
+	/*
+	 * public void fireDeleteLinesEvent() { // animate line deletion }
+	 */
 
 	public void setModelListener(GameEventListener listener)
 	{
@@ -325,59 +325,62 @@ public class Game implements UI_EventListener
 	}
 
 	@Override
-	public synchronized void  onPlayButtonPressed(PlayButtonPressEvent e) 
+	public synchronized void onPlayButtonPressed(PlayButtonPressEvent e)
 	{
-		if (mGameStarted == false && mGamePlay==false)
+		if (mGameStarted == false && mGamePlay == false)
 		{
 			initializeNewGame();
-		}
-		else if (mGamePlay == false)
+		} else if (mGamePlay == false)
 		{
 			restartGame();
-		}
-		else if (mGamePlay == true)
+		} else if (mGamePlay == true)
 		{
 			pauseGame();
 		}
-		
+
 	}
 
-	private void pauseGame() {
-		
-		
+	private void pauseGame()
+	{
+
 		mGamePlay = false;
-		
+
 		GameEvent ev = new GameEvent(this, mGameStarted, mGameOver, mGamePlay);
 		ev.setGamePlayedUpdated(true);
 		mListener.gameEventOccurred(ev);
-		
-		
+
 		mTimer.stop();
-		
+
 	}
 
-	private void restartGame() {
+	private void restartGame()
+	{
 		mGamePlay = true;
 		GameEvent ev = new GameEvent(this, mGameStarted, mGameOver, mGamePlay);
 		ev.setGamePlayedUpdated(true);
+		int newOpacity = getOpacity(); // opacity update is needed if the pause
+										// happened due to level change
+		if (newOpacity != mPictureOpacity)
+		{
+			mPictureOpacity = newOpacity;
+			ev.setCoverTransparency(mPictureOpacity);
+		}
 		mListener.gameEventOccurred(ev);
 		mTimer.setDelay(calculateWaitTime());
 		mTimer.restart();
-		
+
 	}
 
-	
-	public void onAIButtonPressed(AIButtonPressEvent e) {
+	public void onAIButtonPressed(AIButtonPressEvent e)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public synchronized void onKeyPress(KeyBindingEvent e) {
-		
-		
-		
-		
+	public synchronized void onKeyPress(KeyBindingEvent e)
+	{
+
 		String actionName = e.getActionType();
 		if (actionName.equals(ShapeMoveAction.ACTN_ROTATE))
 			onUpKeyPressed();
@@ -387,38 +390,27 @@ public class Game implements UI_EventListener
 			onLeftKeyPressed();
 		else if (actionName.equals(ShapeMoveAction.ACTN_RIGHT))
 			onRightKeyPressed();
-		
+
 	}
 
+	/*
+	 * @Override public void onKeyPressed(ShapeMoveEvent e) { // TODO
+	 * Auto-generated method stub
+	 * 
+	 * }
+	 */
 
-
-/*	@Override
-	public void onKeyPressed(ShapeMoveEvent e) {
-		// TODO Auto-generated method stub
-		
-	}*/
-	
-	
-/*	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		
-		if (mListener==null)
-			return;
-		
-		
-		String actionName = (String)this.getValue(this.NAME);
-		if (actionName.equals(ACTN_ROTATE))
-			onUpKeyPressed();
-		else if (actionName.equals(ACTN_DROP))
-			onDownKeyPressed();
-		else if (actionName.equals(ACTN_LEFT))
-			onLeftKeyPressed();
-		else if (actionName.equals(ACTN_RIGHT))
-			onRightKeyPressed();
-	}*/
-		
-
-	
+	/*
+	 * @Override public void actionPerformed(ActionEvent e) {
+	 * 
+	 * if (mListener==null) return;
+	 * 
+	 * 
+	 * String actionName = (String)this.getValue(this.NAME); if
+	 * (actionName.equals(ACTN_ROTATE)) onUpKeyPressed(); else if
+	 * (actionName.equals(ACTN_DROP)) onDownKeyPressed(); else if
+	 * (actionName.equals(ACTN_LEFT)) onLeftKeyPressed(); else if
+	 * (actionName.equals(ACTN_RIGHT)) onRightKeyPressed(); }
+	 */
 
 }

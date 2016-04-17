@@ -48,7 +48,8 @@ public class PicturePanel extends JPanel{
 		ImageDefinitions.reinitializeHidden();
 		mHiddenPicture = ImageDefinitions.getImage(TetrisContract.HIRE);
 		
-		if (opacity >0)
+		
+		if (opacity >=0)
 		{
 			Graphics2D g2d = (Graphics2D)mHiddenPicture.getGraphics();
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)opacity/255));
@@ -56,7 +57,6 @@ public class PicturePanel extends JPanel{
 		
 			mCoverLabel.setIcon(new ImageIcon(mHiddenPicture));
 			
-			//System.out.println("Drew picture with opacity " + opacity);
 		}
 		
 
