@@ -7,5 +7,5 @@ Under development:
 Implementing an algorithm that will solve the game without user input
 
 
-![ScreenShot](/screenshots/tetrisScreenShot1.jpg)
-![ScreenShot](/screenshots/tetrisScreenShot2.jpg)
+![ScreenShot](/screenShots/tetrisScreenshot1.jpg)
+![ScreenShot](/screenShots/tetrisScreenshot2.jpg)
