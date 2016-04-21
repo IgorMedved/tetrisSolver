@@ -13,6 +13,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
+import tetris_model.contracts.TetrisContract;
 import tetris_model.events.GameEvent;
 import tetris_model.events.GameEventListener;
 import tetris_ui.events.UI_EventListener;
@@ -21,7 +22,7 @@ import tetris_ui.events.ShapeMoveAction;
 /* 
  * This is Top level UI class all the components are initialized and layed out here
  */
-public class MainFrame extends JFrame implements GameEventListener {
+public class MainFrame extends JFrame implements GameEventListener, ActionListener {
 	
 	private TetrisGamePanel mTetrisGamePanel; // panel showing tetris board and all the figures on it (South East corner)
 	private PicturePanel mPicturePanel; // panel with cover picture and hidden picture
@@ -173,8 +174,21 @@ public class MainFrame extends JFrame implements GameEventListener {
 	public void setListener (UI_EventListener listener)
 	{
 		mIntefaceEventListener = listener;
-		mGameHelperPanel.setListener(listener);
+		mGameHelperPanel.setActionListener(this);
 		registerKeyActions();
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent ev)
+	{
+		if (mIntefaceEventListener!=null)
+		{
+			JButton source = (JButton)ev.getSource(); // the source of action performed should be buttons only if it changes the code here would need to be modified
+		
+			if (source.getName().equals(TetrisContract.PLAY_BUTTON))
+				mIntefaceEventListener.onPlayButtonPressed(null);
+		}
+		
 	}
 
 }

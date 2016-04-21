@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import tetris_model.contracts.TetrisContract;
 import tetris_ui.events.UI_EventListener;
 
-public class GameHelperPanel extends JPanel{
+public class GameHelperPanel extends JPanel {
 	
 	private Icon mPlayIcon;
 	private Icon mPauseIcon;
@@ -49,16 +49,10 @@ public class GameHelperPanel extends JPanel{
 		mPlayPauseButton = new JButton();
 		mPlayPauseButton.setPreferredSize(new Dimension (40,40));
 		mPlayPauseButton.setIcon(mPlayIcon);
-		mPlayPauseButton.setBorder(null);;
+		mPlayPauseButton.setBorder(null);
+		mPlayPauseButton.setName(TetrisContract.PLAY_BUTTON);
 		
-		mPlayPauseButton.addActionListener(new ActionListener(){
-			
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				firePlayPauseEvent();
-			}
-		});
+		
 		
 		
 		layoutComponent();
@@ -79,6 +73,7 @@ public class GameHelperPanel extends JPanel{
 		gc.anchor = GridBagConstraints.LINE_START;
 		
 		add (mPlayPauseButton, gc);
+		System.out.println(mPlayPauseButton.getParent());
 		
 		gc.gridx = 1;
 		gc.weightx = 20;
@@ -96,6 +91,7 @@ public class GameHelperPanel extends JPanel{
 		setBackground(new Color(144, 208, 255, 255));
 	}
 	
+	@Deprecated
 	public void firePlayPauseEvent()
 	{
 		
@@ -128,7 +124,7 @@ public class GameHelperPanel extends JPanel{
 	}
 
 
-
+@Deprecated
 	public void setListener(UI_EventListener listener) {
 		mListener = listener;
 		
@@ -161,5 +157,15 @@ public class GameHelperPanel extends JPanel{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
+	public void setActionListener(ActionListener listener)
+	{
+		mPlayPauseButton.addActionListener(listener);
+	}
+
+
+
+	
 
 }

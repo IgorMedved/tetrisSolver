@@ -22,7 +22,7 @@ public class Board
 	public static final int NEXT_SHAPE_BOARD_X = 4;
 	public static final int NEXT_SHAPE_BOARD_Y = 2;
 	
-	private List<List<Integer>> mBoard;
+	protected List<List<Integer>> mBoard;
 	
 	public Board ()
 	{

@@ -32,6 +32,14 @@ public class TetrisContract
 	public static final Color LIGHT_BLUE = new Color(144,208,255);
 	
 	
+	// component name definitions for components triggering game or interface events
+	
+	public static final String PLAY_BUTTON = "playButton";
+	public static final String AI_BUTTON = "aiButton";
+	public static final String HELP_BUTTON = "helpButton";
+			
+	
+	
 	
 	
 	
