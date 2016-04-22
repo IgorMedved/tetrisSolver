@@ -25,8 +25,9 @@ AIButtonPress
 
 List of things to do:
 1) Update model to be working with List<Char>
+   Convert BoardGame to timer
 2) Make interface model Listener
-a) scoreField listens to score updates
-b) levelField listens to level updates
-c) board listens to (valid move/rotation), shape insertion, line deletion
+a) scoreField listens to score updates (when score is updated fire event)
+b) levelField listens to level updates (when level updated fire levelUpdatedEvent)
+c) board listens to (valid move/rotation), shape insertion, line deletion fireBoard
 d) 

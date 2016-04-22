@@ -1,5 +1,6 @@
 package tetris_model.events;
 
+import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class GameEvent extends EventObject
 
 	public  List<List<Integer>> getBoard()
 	{
-		return mBoard;
+		return mBoard== null? null: Collections.unmodifiableList(mBoard);
 	}
 
 
@@ -53,7 +54,7 @@ public class GameEvent extends EventObject
 
 	public List<List<Integer>> getNextShape()
 	{
-		return mNextShape;
+		return mNextShape == null? null: Collections.unmodifiableList(mNextShape);
 	}
 
 

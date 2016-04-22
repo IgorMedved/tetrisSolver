@@ -73,7 +73,6 @@ public class GameHelperPanel extends JPanel {
 		gc.anchor = GridBagConstraints.LINE_START;
 		
 		add (mPlayPauseButton, gc);
-		System.out.println(mPlayPauseButton.getParent());
 		
 		gc.gridx = 1;
 		gc.weightx = 20;
