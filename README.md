@@ -1,5 +1,5 @@
 # tetrisSolver
-Finally the resolver is ready! It works great and can actually beat the game unlike me as my reflexes are not fast enough to play on faster levels
+Finally the solver is ready! It works great and can actually beat the game unlike me as my reflexes are not fast enough to play on faster levels. Here is a little demo
 
 ![ScreenShot](/screenShots/smallDemo.gif)
 
