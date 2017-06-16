@@ -1,11 +1,14 @@
 # tetrisSolver
-Tetris - a popular tile-matching puzzle game
+Finally the resolver is ready! It works great and can actually beat the game unlike me as my reflexes are not fast enough to play on faster levels
 
-Currently the game is fully functional
+![ScreenShot](/screenShots/smallDemo.gif)
 
-Under development:
-Implementing an algorithm that will solve the game without user input
+Of course you can compile the whole thing and see for yourself. Just don't forget the resources directory that has the pictures for the UI (I am working on getting an installer ready)
+
+There is also a small settings bar added with help and a few other options
+
+![ScreenShot](/screenShots/helpMenu.png)
 
 
-![ScreenShot](/screenShots/tetrisScreenshot1.jpg)
-![ScreenShot](/screenShots/tetrisScreenshot2.jpg)
+![ScreenShot](/screenShots/start.png)
+![ScreenShot](/screenShots/tetrisScreenshot2.png)
