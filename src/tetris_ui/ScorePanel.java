@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import tetris_model.contracts.TetrisContract;
 
+// Top left corner panel showing current score and level
 public class ScorePanel extends JPanel{
 	
 	JLabel mLevelLabel;

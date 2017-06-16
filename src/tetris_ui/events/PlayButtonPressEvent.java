@@ -5,7 +5,8 @@ import java.util.EventObject;
 
 public class PlayButtonPressEvent extends EventObject{
 	
-	PlayButtonPressEvent(Object source)
+	
+	public PlayButtonPressEvent(Object source)
 	{
 		super(source);
 	}

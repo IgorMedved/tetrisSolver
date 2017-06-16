@@ -1,15 +1,21 @@
 package tetris_model;
 
+import tetris_model.contracts.TetrisContract;
+
+// Different shapes are represented as collection of points
+// Also used as a vector for current shape movement in AiGameField
 public class Point
 {
 	public static final int INVALID_COORDINATE = -1;
 	public static final int X_LOWER = 0;
-	public static final int X_UPPER = 11;
+	public static final int X_UPPER = TetrisContract.BOARD_SIZE_X-1;
 	public static final int Y_LOWER = 0;
-	public static final int Y_UPPER = 17;
+	public static final int Y_UPPER = TetrisContract.BOARD_SIZE_Y-1;
 	
 	private int mX;
 	private int mY;
+	
+	
 	
 	public Point (int x, int y)
 	{
@@ -18,12 +24,6 @@ public class Point
 	
 	public void setPoint (int x, int y)
 	{
-		/*if (Point.outOfBound(x,y))
-		{
-			mX = INVALID_COORDINATE;
-			mY = INVALID_COORDINATE;
-		}
-		else*/
 		{
 			mX = x;
 			mY = y;
@@ -78,8 +78,6 @@ public class Point
 	
 	public Point down()
 	{
-		
-		
 		return new Point (mX, mY-1);
 	}
 	

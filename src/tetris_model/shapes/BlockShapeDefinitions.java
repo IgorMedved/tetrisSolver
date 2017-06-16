@@ -23,7 +23,7 @@ public class BlockShapeDefinitions
 	// each shape can be in 4 orientations which are rotation invariants of each other
 	private static final int NUM_ORIENTATIONS = 4;
 	
-	// size of GameField Block onto which the shape is superimposed (currently it is a block 5x4)
+	// size of the shape insertion block
 	public static final int SHAPE_BLOCK_SIZE_X =5;
 	public static final int SHAPE_BLOCK_SIZE_Y =4;
 	
@@ -31,6 +31,26 @@ public class BlockShapeDefinitions
 	public static int getNumShapes()
 	{
 		return NUM_SHAPES;
+	}
+	
+	// numRotations represents the number of distinguishable orientations for each shape
+	// for example it is one for square, 2 for s-shape and line, and 4 for t-shape and l-shape
+	public static int getNumRotations(int shapeType)
+	{
+		switch (shapeType)
+		{
+		case S_SHAPE:
+		case INVERTED_S_SHAPE:
+		case LINE_SHAPE:
+			return 2;
+		case T_SHAPE:
+		case L_SHAPE:
+		case INVERTED_L_SHAPE:
+			return 4;
+		default: //square
+			return 1;
+		
+		}
 	}
 	
 	public static int getNumOrientations()
@@ -103,8 +123,9 @@ public class BlockShapeDefinitions
 		
 		
 		
-	// tetris figure definitions as Arrays of 4 points
-	
+	// tetris shape definitions as Arrays of 4 points
+	// Do not change! Other classes rely on the exact order in which each point within an orientation is defined
+	// going left to right from lowest row to highest row
 	private final static Point[][] S_SHAPE_DEF = new Point[][]{{new Point (1,1), new Point (2,1), new Point (2,2), new Point (3,2)},
 																{new Point (3,1), new Point (2,2), new Point (3,2), new Point (2,3)},
 																{new Point (1,2), new Point (2,2), new Point (2,3), new Point (3,3)},
@@ -149,6 +170,11 @@ public class BlockShapeDefinitions
 	
 	private final static Point[][][] ALL_SHAPE_DEF = new Point[][][]{S_SHAPE_DEF, INVERTED_S_SHAPE_DEF, LINE_SHAPE_DEF, 
 																		T_SHAPE_DEF, L_SHAPE_DEF, INVETED_L_SHAPE_DEF, SQUARE_SHAPE_DEF};
+																		
+	public static Point[] getShapeInOrientation(int shape, int orientation)
+	{
+		return ALL_SHAPE_DEF[shape][orientation];
+	}
 
 }
 

@@ -13,23 +13,26 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import tetris_model.Point;
 import tetris_model.contracts.TetrisContract;
 import tetris_ui.events.UI_EventListener;
 
+// a panel in the top right corner showing play button and nextShape panel
 public class GameHelperPanel extends JPanel {
 	
 	private Icon mPlayIcon;
 	private Icon mPauseIcon;
 	
+	private boolean mShowReminder;
+	
 	private JButton mPlayPauseButton;
-	private NextFigurePanel mNextFigurePanel;
-	private JLabel mNextFigureLabel;
+	private TetrisPanel mNextShapePanel;
+	private JLabel mNextShapeLabel;
 	
-	private UI_EventListener mListener;
 	
-	private Thread mGameThread;
 	
 	public GameHelperPanel()
 	{
@@ -38,12 +41,13 @@ public class GameHelperPanel extends JPanel {
 		
 		setBorder (BorderFactory.createLineBorder(Color.BLUE,1));
 		
-		mNextFigureLabel = new JLabel("<html> <font color = blue>Next</font></html>");
-		mNextFigureLabel.setFont(new Font("Andalus", Font.BOLD, 18));
-		mNextFigurePanel = new NextFigurePanel();
+		mNextShapeLabel = new JLabel("<html> <font color = blue>Next</font></html>");
+		mNextShapeLabel.setFont(new Font("Andalus", Font.BOLD, 18));
+		mNextShapePanel = new TetrisPanel(4,2);
 		
 		mPlayIcon = ImageDefinitions.getIcon(TetrisContract.PLAY_BTN);
 		mPauseIcon = ImageDefinitions.getIcon(TetrisContract.PAUSE_BTN);
+		mShowReminder=true;
 		
 		
 		mPlayPauseButton = new JButton();
@@ -51,13 +55,7 @@ public class GameHelperPanel extends JPanel {
 		mPlayPauseButton.setIcon(mPlayIcon);
 		mPlayPauseButton.setBorder(null);
 		mPlayPauseButton.setName(TetrisContract.PLAY_BUTTON);
-		
-		
-		
-		
 		layoutComponent();
-		
-		
 	}
 	
 	
@@ -78,43 +76,23 @@ public class GameHelperPanel extends JPanel {
 		gc.weightx = 20;
 		gc.anchor = GridBagConstraints.LINE_END;
 		
-		add (mNextFigureLabel, gc);
+		add (mNextShapeLabel, gc);
 		
 		
 		gc.gridx = 2;
 		gc.weightx = 4;
 		gc.anchor = GridBagConstraints.LINE_END;
 		
-		add( mNextFigurePanel, gc);
+		add( mNextShapePanel, gc);
 
 		setBackground(new Color(144, 208, 255, 255));
 	}
 	
-	@Deprecated
-	public void firePlayPauseEvent()
-	{
-		
-		if (mListener!= null)
-		{
-			Runnable gameRunnable = new Runnable(){
-				public void run()
-				{
-					mListener.onPlayButtonPressed(null);
-				}
-			};
-			
-			mGameThread = new Thread(gameRunnable);
-			
-			mGameThread.start();
-			
-		}
-			
-		
-	}
 	
-	public void updateNextShape (List<List<Integer>> nextShapeBoard)
+	
+	public void updateNextShape (List<List<Integer>> nextBoard, List<Point> shape, int shapeType)
 	{
-		mNextFigurePanel.showBoard(nextShapeBoard);
+		mNextShapePanel.showBoard(nextBoard, shape, shapeType, null );
 	}
 	
 	public void animateDeletedLines (List<Integer> deletedLines)
@@ -123,16 +101,19 @@ public class GameHelperPanel extends JPanel {
 	}
 
 
-@Deprecated
-	public void setListener(UI_EventListener listener) {
-		mListener = listener;
-		
-	}
 
 
-
-	public void setGameOverMessage(boolean gameOver) {
-		// TODO Auto-generated method stub
+	public void setGameOverMessage(boolean gameOver, boolean gameWon) {
+		if (gameOver)
+		{
+			if (gameWon)
+				JOptionPane.showMessageDialog(this, "Congratulations!!! You Won.");
+			else
+				JOptionPane.showMessageDialog(this, "Game Over!");
+			
+			mShowReminder = true;
+		}
+			
 		
 	}
 
@@ -145,7 +126,12 @@ public class GameHelperPanel extends JPanel {
 			
 		}
 		else
+		{
 			mPlayPauseButton.setIcon(mPlayIcon);
+			if (mShowReminder)
+				JOptionPane.showMessageDialog(this, "Press Play button to continue!");
+			mShowReminder = false;
+		}
 				
 		
 	}
@@ -161,6 +147,12 @@ public class GameHelperPanel extends JPanel {
 	public void setActionListener(ActionListener listener)
 	{
 		mPlayPauseButton.addActionListener(listener);
+	}
+
+
+
+	public void pressPlayButton() {
+		mPlayPauseButton.doClick();
 	}
 
 

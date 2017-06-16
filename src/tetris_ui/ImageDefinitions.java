@@ -11,10 +11,9 @@ import javax.swing.JPanel;
 
 import tetris_model.contracts.TetrisContract;
 
+// all the .gif resources used in GUI are defined here
 public class ImageDefinitions  extends JPanel  {
-	
-	
-	
+	// images used for showing board
 	private static BufferedImage EMPTYLIGHT; 
 	private static BufferedImage EMPTYDARK;
 	private static BufferedImage LINE_SHAPE; 
@@ -24,10 +23,17 @@ public class ImageDefinitions  extends JPanel  {
 	private static BufferedImage S_SHAPE; 
 	private static BufferedImage INVERSE_S;
 	private static BufferedImage T_SHAPE;
+	// hint arrows
+	private static BufferedImage LEFT_ARROW;
+	private static BufferedImage RIGHT_ARROW;
+	private static BufferedImage TURN_ARROW;
+	private static BufferedImage DOWN_ARROW;
+	//
 	private static BufferedImage COVER;
+	private static BufferedImage HIRE;
 	private static BufferedImage PLAY_BTN;
 	private static BufferedImage PAUSE_BTN;
-	private static BufferedImage HIRE;
+	
 	
 	
 	
@@ -53,6 +59,10 @@ public class ImageDefinitions  extends JPanel  {
 		HIRE = ImageIO.read(new File(resources + File.separatorChar + "programming.png"));
 		PLAY_BTN = ImageIO.read(new File(resources + File.separatorChar + "playblue.png"));
 		PAUSE_BTN =ImageIO.read(new File(resources + File.separatorChar + "pauseblue.png"));
+		LEFT_ARROW =ImageIO.read(new File(resources + File.separatorChar + "arrow_left.png"));
+		RIGHT_ARROW =ImageIO.read(new File(resources + File.separatorChar + "arrow_right.png"));
+		TURN_ARROW = ImageIO.read(new File(resources + File.separatorChar + "arrow_turn.png"));
+		DOWN_ARROW = ImageIO.read(new File(resources + File.separatorChar + "arrow_down.png"));
 		
 		}
 		catch (IOException e)
@@ -119,6 +129,14 @@ public class ImageDefinitions  extends JPanel  {
 			return PLAY_BTN;
 		case TetrisContract.PAUSE_BTN:
 			return PAUSE_BTN;
+		case TetrisContract.LEFT_ARROW:
+			return LEFT_ARROW;
+		case TetrisContract.RIGHT_ARROW:
+			return RIGHT_ARROW;
+		case TetrisContract.TURN_ARROW:
+			return TURN_ARROW;
+		case TetrisContract.DOWN_ARROW:
+			return DOWN_ARROW;
 		
 		default:
 			return null;

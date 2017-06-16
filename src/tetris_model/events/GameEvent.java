@@ -4,44 +4,84 @@ import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 
+import tetris_model.Board;
+import tetris_model.BoardType;
+import tetris_model.GameState;
+import tetris_model.Point;
+// the object used to pass information from model to GUI in order to update GUI after model changes
 public class GameEvent extends EventObject
 {
 	public static final int NOT_UPDATED = -1;
 	
-	private List<List<Integer>> mBoard;
-	private List<List<Integer>> mNextShape;
+	private List<List<Integer>> mBoard; // representation of the game board
+	private static List<List<Integer>> mNextShapeBoard = new Board (BoardType.NEXTSHAPEBOARD).getBoard(); // representation of the 
+	// next shape board it is always the same
+	private List<Point> mCurrentShape;
+	private List<Point> mNextShape;
+	private List<Point> mHintsLocations;
+	private int mCurrentShapeType;
+	private int mNextShapeType;
 	private List<Integer> mLinesDeleted;
 	private int mScore;
 	private int mLevel;
 	private boolean mStartGame;
 	private boolean mGameOver;
 	private boolean mGamePlayed;
+	private boolean mGameWon;
 	private int mCoverOpacity; // integer from 0 to 255;
-	
-	
 	private boolean mGameStartedUpdated;
 	private boolean mGamePlayedUpdated;
 	private boolean mGameOverUpdated;
+	private String message;
 	
-	
-	
-	
-	public GameEvent(Object source, boolean isStartGame, boolean isGameOver, boolean isGamePlayed)
+	public GameEvent(Object source, GameState state, List<List<Integer>> mainBoard, List<Point> currentShape, int currentShapeType, List<Point> nextShape, int nextShapeType, String message)
 	{
 		super(source);
 		
-		mBoard = null;
-		mNextShape = null;
+			mBoard = mainBoard;
+			mCurrentShape = currentShape;
+			mCurrentShapeType = currentShapeType;
+			mNextShape = nextShape;
+			
+			mNextShapeType = nextShapeType;
+		
+		
 		mLinesDeleted = null;
-		mScore = NOT_UPDATED;
-		mLevel = NOT_UPDATED;
-		mStartGame = isStartGame;
-		mGameOver = isGameOver;
-		mGamePlayed = isGamePlayed;
-		mCoverOpacity = NOT_UPDATED;
+		if (state.isStateUpdated())
+		{
+			mScore = state.getScore();
+			mLevel = state.getLevel();
+			mCoverOpacity = state.getPictureOpacity();
+		}
+		else
+		{
+			mScore = NOT_UPDATED;
+			mLevel = NOT_UPDATED;
+			mCoverOpacity = NOT_UPDATED;
+		}
+		mStartGame = state.isGameStarted();
+		mGameOver = state.isGameOver();
+		mGamePlayed = state.isGamePlay();
+		mGameWon = state.isGameWon();
+		
+		if (state.isGamePlayStatusUpdated())
+		{
+			mGameStartedUpdated = true;
+			mGameOverUpdated = true;
+			mGamePlayedUpdated = true;
+			
+		}
+		else
+		{
+			mGameStartedUpdated = false;
+			mGameOverUpdated = false;
+			mGamePlayedUpdated = false;
+			
+		}
+		
+//		System.out.println("The event came from " + message);
+		this.message = message;
 	}
-
-
 
 
 	public  List<List<Integer>> getBoard()
@@ -50,14 +90,10 @@ public class GameEvent extends EventObject
 	}
 
 
-
-
-	public List<List<Integer>> getNextShape()
+	public List<List<Integer>> getNextShapeBoard()
 	{
-		return mNextShape == null? null: Collections.unmodifiableList(mNextShape);
+		return mNextShapeBoard == null? null: Collections.unmodifiableList(mNextShapeBoard);
 	}
-
-
 
 
 	public List<Integer> getLinesDeleted()
@@ -66,14 +102,10 @@ public class GameEvent extends EventObject
 	}
 
 
-
-
 	public int getScore()
 	{
 		return mScore;
 	}
-
-
 
 
 	public int getLevel()
@@ -82,14 +114,10 @@ public class GameEvent extends EventObject
 	}
 
 
-
-
 	public boolean isStartGame()
 	{
 		return mStartGame;
 	}
-
-
 
 
 	public boolean isGameOver()
@@ -98,14 +126,10 @@ public class GameEvent extends EventObject
 	}
 
 
-
-
 	public boolean isGamePlayed()
 	{
 		return mGamePlayed;
 	}
-
-
 
 
 	public int getCoverOpacity()
@@ -114,22 +138,30 @@ public class GameEvent extends EventObject
 	}
 
 
-
-
 	public void setBoard(List<List<Integer>> board)
 	{
 		mBoard = board;
 	}
 
 
-
-
-	public void setNextShape(List<List<Integer>> nextShape)
-	{
-		mNextShape = nextShape;
+	public List<Point> getCurrentShape() {
+		return mCurrentShape;
 	}
 
 
+	public void setCurrentShape(List<Point> currentShape) {
+		mCurrentShape = currentShape;
+	}
+
+
+	public List<Point> getNextShape() {
+		return mNextShape;
+	}
+
+
+	public void setNextShape(List<Point> nextShape) {
+		mNextShape = nextShape;
+	}
 
 
 	public void setLinesDeleted(List<Integer> linesDeleted)
@@ -138,14 +170,10 @@ public class GameEvent extends EventObject
 	}
 
 
-
-
 	public void setScore(int score)
 	{
 		mScore = score;
 	}
-
-
 
 
 	public void setLevel(int level)
@@ -154,14 +182,10 @@ public class GameEvent extends EventObject
 	}
 
 
-
-
 	public void setStartGame(boolean startGame)
 	{
 		mStartGame = startGame;
 	}
-
-
 
 
 	public void setGameOver(boolean gameOver)
@@ -170,14 +194,10 @@ public class GameEvent extends EventObject
 	}
 
 
-
-
 	public void setGamePlayed(boolean gamePlayed)
 	{
 		mGamePlayed = gamePlayed;
 	}
-
-
 
 
 	public void setCoverTransparency(int coverTransparency)
@@ -185,11 +205,10 @@ public class GameEvent extends EventObject
 		mCoverOpacity = coverTransparency;
 	}
 	
+
 	public boolean isGameStartedUpdated() {
 		return mGameStartedUpdated;
 	}
-
-
 
 
 	public void setGameStartedUpdated(boolean mGameStartedUpdated) {
@@ -197,13 +216,9 @@ public class GameEvent extends EventObject
 	}
 
 
-
-
 	public boolean isGamePlayedUpdated() {
 		return mGamePlayedUpdated;
 	}
-
-
 
 
 	public void setGamePlayedUpdated(boolean mGamePlayedUpdated) {
@@ -211,13 +226,9 @@ public class GameEvent extends EventObject
 	}
 
 
-
-
 	public boolean isGameOverUpdated() {
 		return mGameOverUpdated;
 	}
-
-
 
 
 	public void setGameOverUpdated(boolean mGameOverUpdated) {
@@ -225,6 +236,46 @@ public class GameEvent extends EventObject
 	}
 
 
+	public List<Point> getHintsLocations() {
+		return mHintsLocations;
+	}
+
+
+	public void setHintsLocations(List<Point> hintsLocations) {
+		mHintsLocations = hintsLocations;
+	}
+	
+
+	public static List<List<Integer>> getmNextShapeBoard() {
+		return mNextShapeBoard;
+	}
+
+
+	public int getCurrentShapeType() {
+		return mCurrentShapeType;
+	}
+
+	
+	public int getNextShapeType() {
+		return mNextShapeType;
+	}
+
+
+	public String getMessage() {
+		return message;
+	}
+
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+
+	public boolean isGameWon() {
+		return mGameWon;
+	}
+	
+	
 	
 	
 }

@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import tetris_model.contracts.TetrisContract;
 
+// The panel in the middle left showing cover picture that hides secret picture
 public class PicturePanel extends JPanel{
 	private JLabel mCoverLabel;
 	private BufferedImage mCoverPicture;

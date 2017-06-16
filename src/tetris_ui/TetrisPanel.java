@@ -14,20 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
+import tetris_model.Point;
 import tetris_model.contracts.TetrisContract;
 
 
-
+// a pane that is used to represent mainBoard and next shape boards on a screen
 public class TetrisPanel extends JLayeredPane {
 	protected List<List<JLabel>> mBackgroundLabels; // Labels showing the board itself
 	protected List<List<JLabel>> mBoardLabels; // labels showing shapes on the board
 	
 	private int mBoardSizeX; // the width of the board
 	private int mBoardSizeY; // the height of the board
-	
+
 	public TetrisPanel(int boardSizeX, int boardSizeY)
 	{
 		super();
@@ -36,6 +38,7 @@ public class TetrisPanel extends JLayeredPane {
 		
 		setPreferredSize(new Dimension(mBoardSizeX*20+4, mBoardSizeY*20+4));
 		setBorder(BorderFactory.createLineBorder(Color.BLUE,2));
+		showBoardBackground();
 		
 	}
 	
@@ -126,16 +129,13 @@ public class TetrisPanel extends JLayeredPane {
 	
 	// shows the board passed to this method in UI. 
 	//If mBoard == null it will show empty board
-	public synchronized void showBoard(List<List<Integer>> mBoard)
+	public synchronized void showBoard(List<List<Integer>> mBoard, List<Point> shape, int shapeType, List<Point> hintsLocations)
 	{
-		
 		if (mBoardLabels == null)
 		{
 			initializeLabels(mBoard);
 				
 		}
-		else
-		{
 			for (int i = 0; i < mBoardSizeY; i++)
 			{
 				
@@ -158,8 +158,43 @@ public class TetrisPanel extends JLayeredPane {
 				}
 				
 			}
-		}
-		
+			if (shape!=null)
+			{
+				for (Point point:shape)
+				{
+					//System.out.println("Point: " + point.getX() +" " + point.getY());
+					mBoardLabels.get(point.getY()).get(point.getX()).setIcon(ImageDefinitions.getIcon(shapeType));
+					setLayer(mBoardLabels.get(point.getY()).get(point.getX()), 1);
+					
+				}
+			}
+			
+			if (hintsLocations != null && hintsLocations.size()!=0)
+			{
+				Point point;
+				Icon icon;
+				for (int i = 0; i < hintsLocations.size(); i++)
+				{
+					point = hintsLocations.get(i);
+					switch (i)
+					{
+					case 0:
+						icon = ImageDefinitions.getIcon(TetrisContract.LEFT_ARROW);
+						break;
+					case 1:
+						icon = ImageDefinitions.getIcon(TetrisContract.TURN_ARROW);
+						break;
+					case 2:
+						icon = ImageDefinitions.getIcon(TetrisContract.RIGHT_ARROW);
+						break;
+						default:
+							icon = ImageDefinitions.getIcon(TetrisContract.DOWN_ARROW);
+					}
+					if (point.getX()>=0 && point.getX()< TetrisContract.BOARD_SIZE_X){
+						mBoardLabels.get(point.getY()).get(point.getX()).setIcon(icon);
+						setLayer(mBoardLabels.get(point.getY()).get(point.getX()), 1);
+					}
+				}
+			}
 	}
-
 }

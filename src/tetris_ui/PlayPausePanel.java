@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,10 +14,11 @@ import tetris_model.contracts.TetrisContract;
 import tetris_ui.events.PlayPanelEventListener;
 import tetris_ui.events.UI_EventListener;
 
+// A panel on which play button is located
 public class PlayPausePanel extends JPanel {
 	
-	private JLabel mPlayLabel;
-	private JLabel mPauseLabel;
+	private JLabel mPlayLabel; // label showing play button
+	private JLabel mPauseLabel; // label showing pause button
 	private JButton mPlayPauseButton;
 	
 	private UI_EventListener mListener;
@@ -40,6 +42,8 @@ public class PlayPausePanel extends JPanel {
 				firePlayPauseEvent();
 			}
 		});
+		
+		
 		
 		
 		//add (mPlayLabel, "play");

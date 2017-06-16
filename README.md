@@ -1,5 +1,5 @@
 # tetrisSolver
-Tetris - a popular tile-matching puzzle  game
+Tetris - a popular tile-matching puzzle game
 
 Currently the game is fully functional
 
